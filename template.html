@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EDJR - Elite Dangerous Journal Reader</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+</head>
+<body>
+    <div id="currentSystem" class="">
+        <h2>Current System:</h2>
+        <h3 class="systemName">Taurus Dark Region EB-X b1-2</h3>
+        <div class="starClass">{{StarClass}}</div>
+        <div class="systemDiscovered">{{WasDiscovered}}</div>
+        <progress id="systemScanProgress" max="1" value="0.5"></progress>
+    </div>
+    
+    <div id="nextSystem">
+        <h2>Target System:</h2>
+        <h3 class="systemName">Taurus Dark Region EB-X b1-2</h3>
+        <div class="starClass">{{StarClass}}</div>
+    </div>
+    
+        
+    <div id="cards">
+        <div class="card elementStyle">
+            <div class="card_header">
+                <h3 class="body_name">Taurus Dark Region EB-X b1-2 A 3 C</h3>
+            </div>
+            <div class="card_body">
+                <div class="row2">
+                    <div>Discovered</div>
+                    <div>TRUE</div>
+                </div>
+                <div class="row2">
+                    <div>mapped</div>
+                    <div>false</div>
+                </div>
+            </div>
+        </div>
+<!--        <div class="card elementStyle">{{system.body[2]}}</div>-->
+<!--        <div class="card elementStyle">{{system.body[3]}}</div>-->
+    </div>
+
+</body>
+</html>

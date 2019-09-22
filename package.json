@@ -1,0 +1,12 @@
+{
+  "name": "elite_node_js",
+  "version": "1.0.0",
+  "dependencies": {
+    "event-stream": "^4.0.1",
+    "tail": "^2.0.3"
+  },
+  "devDependencies": {
+    "sass": "^1.22",
+    "tsc": "^1.20150623"
+  }
+}
