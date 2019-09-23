@@ -3,7 +3,7 @@ $_border: #c06400
 $_selected: rgb(77, 144, 254)
 $_font: rgb(204, 204, 204)
 
-$header_border: rgb(28,15,0)
+$header_border: rgb(28, 15, 0)
 $header_background: #c06400
 $header_font: #000000
 
@@ -16,14 +16,14 @@ $element_font: rgb(204, 204, 204)
   margin: 0
   padding: 0
   outline: 0
-  
+
 body
   padding: 1em
   background-color: $_background
   color: $_font
   font-family: "Arial"
 
-h2,h3
+h2, h3
   border: 1px solid $header_border
   background: $header_background
   color: $header_font
@@ -32,19 +32,22 @@ h2,h3
   padding: 0.2em 0.4em
 
 .elementStyle
-  background: $element_background 
+  background: $element_background
   color: $element_font
 
 #currentSystem,
 #nextSystem
   margin-bottom: 1em
   border: 1px solid $_border
+
   div
     padding: 0.3em
+
   .systemName,
   .starClass
     display: inline-block
     width: 49%
+
   .starClass
     text-align: right
 
@@ -53,15 +56,16 @@ progress
   appearance: none
   width: 100%
   height: 2.5em
+
   &::-webkit-progress-value
     animation: animate-glow 1s ease-in-out infinite
-    
+
 @keyframes animate-glow
-  0% 
+  0%
     box-shadow: 0 5px 5px rgba(255, 255, 255, .7) inset, 0 -5px 5px rgba(255, 255, 255, .7) inset
-  50% 
+  50%
     box-shadow: 0 5px 5px rgba(255, 255, 255, .3) inset, 0 -5px 5px rgba(255, 255, 255, .3) inset
-  100% 
+  100%
     box-shadow: 0 5px 5px rgba(255, 255, 255, .7) inset, 0 -5px 5px rgba(255, 255, 255, .7) inset
 
 #cards
@@ -70,24 +74,29 @@ progress
   align-items: stretch
   align-content: stretch
   justify-content: space-between
+
   .card
     border: 1px solid $element_border
     width: 20%
+
   .card_header
     width: 100%
 
 .row2
   display: block
+
   div
     display: inline-block
+
     &:first-child
       width: 50%
       float: left
+
     &:last-child
       width: 50%
       float: left
       text-align: right
-  
+
 .body_icon
   height: 2.5em
   width: 2.5em
@@ -96,9 +105,10 @@ progress
   font-size: 3em
   background: $_background
   display: inline-block
+
   &::before
     content: '?'
-    
+
 .body_name
   display: block
   width: 100%

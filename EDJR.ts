@@ -1,4 +1,4 @@
-import { EliteJournal } from './src/events/_EliteJournal'
+import {EliteJournal} from './src/events/_EliteJournal'
 import {Location} from "./src/events/location";
 import {FSDTarget} from "./src/events/FSDTarget";
 import {StartJump} from "./src/events/startJump";
@@ -10,15 +10,15 @@ import {SAAScanComplete} from "./src/events/SAAScanComplete";
 import {SAASignalsFound} from "./src/events/SAASignalsFound";
 import {Fileheader} from "./src/events/fileheader";
 
-export class EDJR{
-  
+export class EDJR {
+
   protected listen_events = [
-    'Location', 'FSDTarget','FSDJump','StartJump',
+    'Location', 'FSDTarget', 'FSDJump', 'StartJump',
     'Scan',
-    'FSSAllBodiesFound','FSSDiscoveryScan','FSSSignalDiscovered',
-    'SAAScanComplete','SAASignalsFound'
+    'FSSAllBodiesFound', 'FSSDiscoveryScan', 'FSSSignalDiscovered',
+    'SAAScanComplete', 'SAASignalsFound'
   ];
-  
+
   protected system_properties: {
     name: string,
     scan_progress: number,
@@ -30,8 +30,8 @@ export class EDJR{
     star_type: string,
     scoopable: boolean | false
   };
-  
-  public LogEvent(data: EliteJournal){
+
+  public LogEvent(data: EliteJournal) {
     if (this.listen_events.indexOf(data.event) >= 0) {
       this.system_properties._events.push(data);
       return true;
@@ -40,36 +40,49 @@ export class EDJR{
   }
 
   //<editor-fold desc="Event Processes">
-  public Location(data: Location){
+  // Location summary when loading game
+  public Location(data: Location) {
     this.system_properties.name = data.StarSystem
   }
-  public FSDTarget(data: FSDTarget){
+
+  // Targeted a system to jump to ( pre StartJump )
+  public FSDTarget(data: FSDTarget) {
     this.next_system.name = data.Name;
   }
-  public StartJump(data: StartJump){
+
+  // Begun jumping to a system (post FSDTarget, pre FSDJump)
+  public StartJump(data: StartJump) {
     this.next_system.name = data.StarSystem;
     this.next_system.star_type = data.StarClass;
     this.next_system.scoopable = !!"KGBFOAM".indexOf(data.StarClass.toUpperCase());
   }
-  public FSDJump(data: FSDJump){
+
+  // Dropped into a system
+  public FSDJump(data: FSDJump) {
     this.system_properties.name = data.StarSystem
-  }
-  public Scan(data: Scan){
-    this.system_properties.name = data.StarSystem
-  }
-  public FSSAllBodiesFound(data: FSSAllBodiesFound){
-    this.system_properties.name = data.StarSystem
-  }
-  public FSSDiscoveryScan(data: FSSAllBodiesFound){
-    this.system_properties.name = data.StarSystem
-  }
-  public FSSSignalDiscovered(data: FSSSignalDiscovered){
-  }
-  public SAAScanComplete(data: SAAScanComplete){
   }
 
-  public SAASignalsFound(data: SAASignalsFound){
+  public Scan(data: Scan) {
+    this.system_properties.name = data.StarSystem
   }
+
+  public FSSAllBodiesFound(data: FSSAllBodiesFound) {
+    this.system_properties.name = data.StarSystem
+  }
+
+  public FSSDiscoveryScan(data: FSSAllBodiesFound) {
+    this.system_properties.name = data.StarSystem
+  }
+
+  public FSSSignalDiscovered(data: FSSSignalDiscovered) {
+  }
+
+  public SAAScanComplete(data: SAAScanComplete) {
+  }
+
+  public SAASignalsFound(data: SAASignalsFound) {
+  }
+
   //</editor-fold>
-  
+
 }

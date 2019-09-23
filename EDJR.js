@@ -18,17 +18,21 @@ var EDJR = /** @class */ (function () {
         return false;
     };
     //<editor-fold desc="Event Processes">
+    // Location summary when loading game
     EDJR.prototype.Location = function (data) {
         this.system_properties.name = data.StarSystem;
     };
+    // Targeted a system to jump to ( pre StartJump )
     EDJR.prototype.FSDTarget = function (data) {
         this.next_system.name = data.Name;
     };
+    // Begun jumping to a system (post FSDTarget, pre FSDJump)
     EDJR.prototype.StartJump = function (data) {
         this.next_system.name = data.StarSystem;
         this.next_system.star_type = data.StarClass;
         this.next_system.scoopable = !!"KGBFOAM".indexOf(data.StarClass.toUpperCase());
     };
+    // Dropped into a system
     EDJR.prototype.FSDJump = function (data) {
         this.system_properties.name = data.StarSystem;
     };
