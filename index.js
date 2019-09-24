@@ -1,12 +1,26 @@
-// 
-// dont mind me... just pissing about..
-// 
+// dont mind me... just pissing about.. 
 
 let EDJR = require("./EDJR");
+let app = require('express')();
+let http = require('http').createServer(app);
+let io = require('socket.io')(http);
+
+// setup web application serve
+app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
+app.get('/style.css', (req, res) => res.sendFile(__dirname + '/public/style.css'));
+// serve the web application
+http.listen(3000, () => console.info('Serving silver platter to http://127.0.0.1:3000'));
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+});
+
 
 return;
 
-let fs = require("fs");
 let es = require("event-stream");
 let Tail = require('tail').Tail;
 

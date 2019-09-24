@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>EDJR - Elite Dangerous Journal Reader</title>
-    <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+    </script>
 </head>
 <body>
     <div id="currentSystem" class="">
@@ -19,7 +23,6 @@
         <h3 class="systemName">Taurus Dark Region EB-X b1-2</h3>
         <div class="starClass">{{StarClass}}</div>
     </div>
-    
         
     <div id="cards">
         <div class="card elementStyle">

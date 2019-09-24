@@ -78,6 +78,12 @@ progress::-webkit-progress-value {
 #cards .card {
   border: 1px solid #c06400;
   width: 20%;
+  min-width: 200px;
+}
+@media screen and (max-width: 600px) {
+  #cards .card {
+    width: 50%;
+  }
 }
 #cards .card_header {
   width: 100%;

@@ -1,3 +1,4 @@
+
 $_background: #000000
 $_border: #c06400
 $_selected: rgb(77, 144, 254)
@@ -10,6 +11,8 @@ $header_font: #000000
 $element_border: #c06400
 $element_background: rgb(56, 29, 0)
 $element_font: rgb(204, 204, 204)
+
+$break-small: 600px
 
 *
   box-sizing: border-box
@@ -78,6 +81,9 @@ progress
   .card
     border: 1px solid $element_border
     width: 20%
+    min-width: 200px
+    @media screen and (max-width: $break-small)
+      width: 50%
 
   .card_header
     width: 100%
