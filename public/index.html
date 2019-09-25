@@ -5,38 +5,38 @@
     <title>EDJR - Elite Dangerous Journal Reader</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-      var socket = io();
-    </script>
+    <script src="/vue.js"></script>
 </head>
-<body>
+<body id="EDJR">
     <div id="currentSystem" class="">
         <h2>Current System:</h2>
-        <h3 class="systemName">Taurus Dark Region EB-X b1-2</h3>
-        <div class="starClass">{{StarClass}}</div>
-        <div class="systemDiscovered">{{WasDiscovered}}</div>
-        <progress id="systemScanProgress" max="1" value="0.5"></progress>
+        <h3 class="systemName">{{system.name}}</h3>
+        <div class="starClass">{{system.star_class}}</div>
+        <div class="systemDiscovered">Discovered already?</div>
+        <div class="systemDiscovered">{{system.was_discovered}}</div>
+        <progress id="systemScanProgress" max="1" :value="system.scan_progress"></progress>
     </div>
     
     <div id="nextSystem">
         <h2>Target System:</h2>
         <h3 class="systemName">Taurus Dark Region EB-X b1-2</h3>
-        <div class="starClass">{{StarClass}}</div>
+        <div class="starClass">{{ star_class }}</div>
     </div>
         
-    <div id="cards">
-        <div class="card elementStyle">
+    <div id="bodies" class="cards">
+
+        <div v-for="body in bodies" class="card elementStyle">
             <div class="card_header">
                 <h3 class="body_name">Taurus Dark Region EB-X b1-2 A 3 C</h3>
             </div>
             <div class="card_body">
                 <div class="row2">
                     <div>Discovered</div>
-                    <div>TRUE</div>
+                    <div>{{ body.was_discovered }}</div>
                 </div>
                 <div class="row2">
                     <div>mapped</div>
-                    <div>false</div>
+                    <div>{{ body.was_mapped }}</div>
                 </div>
             </div>
         </div>
@@ -45,4 +45,43 @@
     </div>
 
 </body>
+<script type="text/javascript">
+  let EDJR = {
+    currentSystem:{
+      name: "test",
+      star_class: "",
+      was_discovered: "",
+      scan_progress: 0
+    },
+    nextSystem:{},
+    bodies: []
+  };
+
+  let currentSystem = new Vue({
+    el: '#currentSystem',
+    data: {system:EDJR.currentSystem}
+  })
+
+  let bodies = new Vue({
+    el: "#bodies",
+    data: {bodies:EDJR.bodies},
+  })
+
+  var socket = io();
+  socket.on("message", function (d, a) {
+    if (d.action === "update") {
+      EDJR = d.EDJRData;
+      currentSystem._data.system = EDJR.currentSystem;
+      bodies._data.bodies = EDJR.bodies.bodies;
+    }
+    if (d.action === "updateCurrentSystem") {
+      EDJR.currentSystem = d.data;
+      currentSystem._data.system = EDJR.currentSystem;
+    }
+    if (d.action === "updateBodies") {
+      EDJR.bodies = d.data;
+      bodies._data.bodies = EDJR.bodies;
+    }
+  })
+</script>
 </html>

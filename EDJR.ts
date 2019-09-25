@@ -8,35 +8,47 @@ import {FSSAllBodiesFound} from "./src/events/FSSAllBodiesFound";
 import {FSSSignalDiscovered} from "./src/events/FSSSignalDiscovered";
 import {SAAScanComplete} from "./src/events/SAAScanComplete";
 import {SAASignalsFound} from "./src/events/SAASignalsFound";
-import {Fileheader} from "./src/events/fileheader";
+// import {Fileheader} from "./src/events/fileheader";
 
 export class EDJR {
 
-  protected listen_events = [
+  public listen_events= [
     'Location', 'FSDTarget', 'FSDJump', 'StartJump',
     'Scan',
     'FSSAllBodiesFound', 'FSSDiscoveryScan', 'FSSSignalDiscovered',
     'SAAScanComplete', 'SAASignalsFound'
   ];
-
-  protected system_properties: {
+  public system_properties: {
     name: string,
     scan_progress: number,
+    was_discovered?: boolean
     primary_bodies?: number
     _events: Array<EliteJournal>
   };
-  protected next_system: {
+  public next_system: {
     name: string,
     star_type: string,
     scoopable: boolean | false
   };
 
-  public LogEvent(data: EliteJournal) {
+  public constructor(name: string) {
+    this.system_properties = Object();
+    this.system_properties.name = 'Taurus Dark Region EB-X b1-2';
+  }
+  public getSystemDetails(){
+    return this.system_properties
+  }
+
+  public logEvent(data: EliteJournal) {
     if (this.listen_events.indexOf(data.event) >= 0) {
       this.system_properties._events.push(data);
       return true;
     }
     return false;
+  }
+
+  public getData(){
+    return this.system_properties;
   }
 
   //<editor-fold desc="Event Processes">
@@ -84,5 +96,4 @@ export class EDJR {
   }
 
   //</editor-fold>
-
 }

@@ -68,24 +68,24 @@ progress::-webkit-progress-value {
     box-shadow: 0 5px 5px rgba(255, 255, 255, 0.7) inset, 0 -5px 5px rgba(255, 255, 255, 0.7) inset;
   }
 }
-#cards {
+.cards {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
   align-content: stretch;
   justify-content: space-between;
 }
-#cards .card {
+.cards .card {
   border: 1px solid #c06400;
   width: 20%;
   min-width: 200px;
 }
 @media screen and (max-width: 600px) {
-  #cards .card {
+  .cards .card {
     width: 50%;
   }
 }
-#cards .card_header {
+.cards .card_header {
   width: 100%;
 }
 

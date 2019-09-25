@@ -1,21 +1,29 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
+// import {Fileheader} from "./src/events/fileheader";
 var EDJR = /** @class */ (function () {
-    function EDJR() {
+    function EDJR(name) {
         this.listen_events = [
             'Location', 'FSDTarget', 'FSDJump', 'StartJump',
             'Scan',
             'FSSAllBodiesFound', 'FSSDiscoveryScan', 'FSSSignalDiscovered',
             'SAAScanComplete', 'SAASignalsFound'
         ];
-        //</editor-fold>
+        this.system_properties = Object();
+        this.system_properties.name = 'Taurus Dark Region EB-X b1-2';
     }
-    EDJR.prototype.LogEvent = function (data) {
+    EDJR.prototype.getSystemDetails = function () {
+        return this.system_properties;
+    };
+    EDJR.prototype.logEvent = function (data) {
         if (this.listen_events.indexOf(data.event) >= 0) {
             this.system_properties._events.push(data);
             return true;
         }
         return false;
+    };
+    EDJR.prototype.getData = function () {
+        return this.system_properties;
     };
     //<editor-fold desc="Event Processes">
     // Location summary when loading game
