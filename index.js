@@ -7,9 +7,11 @@ let systems = {
     star_class: "?",
     scoopable: false,
     was_discovered: true,
-    scan_progress: 1,
+    scan_progress: 0.00,
+    body_count: 0,
+    non_body_count: 0,
     main_body: 1,
-    bodies: []
+    bodies: {}
   }
 };
 
@@ -22,7 +24,7 @@ function process_log(log){
   let system_name ="";
   let body_template = {
     "star_system": "StarSystem", // important one?
-    "system_name": "BodyName",
+    "body_name": "BodyName",
     "star_class": "StarClass",
     "distance_from_arival": "DistanceFromArrivalLS",
     "was_discovered": "WasDiscovered",
@@ -41,45 +43,83 @@ function process_log(log){
   };
   let scoopable_types = ["K","G","B","F","O","A","M",];
   if (log.event==="Location"){
-    if (!systems[log.StarSystem].length){
-      systems[log.StarSystem].system_name = systems[log.StarSystem].system_name || log.StarSystem;
+    
+    if (systems[log.StarSystem]===undefined){
+      systems[log.StarSystem] = JSON.parse(JSON.stringify( systems['__blank__']));
+      systems[log.StarSystem].system_name = log.StarSystem;
       system_name = systems[log.StarSystem].system_name;
     }
-    EDJRData.targetSystem = systems[log.Name];
-  }else if (log.event==="FSDTarget"){
-    if (!systems[log.Name].length){
-      systems[log.Name].system_name = systems[log.Name].system_name || log.Name;
-      system_name = systems[log.Name].system_name;
+    EDJRData.targetSystem = systems[system_name];
+    
+  }
+  else if(log.event==="FSDTarget"){
+    if (log.StarSystem===undefined) log.StarSystem = log.Name;
+    
+    if (systems[log.StarSystem]===undefined){
+      systems[log.StarSystem] = JSON.parse(JSON.stringify( systems['__blank__']));
+      systems[log.StarSystem].system_name = log.StarSystem;
+      systems[log.StarSystem].scoopable = false;
+      system_name = systems[log.StarSystem].system_name;
     }
-    EDJRData.targetSystem = systems[log.Name];
-  }else if(log.event === "StartJump"){
-    systems[log.StarSystem].system_name = systems[log.StarSystem].system_name || log.StarSystem;
-    systems[log.StarSystem].start_class = systems[log.StarSystem].star_class || log.StarClass;
+    EDJRData.targetSystem = systems[system_name];
+    
+  }
+  else if(log.event === "StartJump"){
+    
+    systems[log.StarSystem].system_name = log.StarSystem;
+    systems[log.StarSystem].star_class = log.StarClass;
     systems[log.StarSystem].scoopable = scoopable_types.includes(systems[log.StarSystem].star_class);
     system_name = systems[log.StarSystem].system_name;
     
-  }else if(log.event === "FSDJump"){
+  }
+  else if(log.event === "FSDJump"){
     //main body
-    systems[log.StarSystem].main_body = log.BodyID;
+    systems[log.StarSystem].main_body = log.BodyID.toFixed(0);
     system_name = systems[log.StarSystem].system_name;
     EDJRData.targetSystem=systems['__blank__'];
     EDJRData.currentSystem=systems[system_name];
-  }else if(log.event === "Scan"){
-    if (log.BodyID === systems[log.StarSystem].main_body) {
+  }
+  else if(log.event === "Scan"){
+    let bodyId = log.BodyID.toFixed(0);
+    if (bodyId === systems[log.StarSystem].main_body) {
       // this is the main star, consider some system details here
-      systems[log.StarSystem].was_discovered = systems[log.StarSystem].was_discovered || log.WasDiscovered;
+      systems[log.StarSystem].was_discovered = log.WasDiscovered;
     }
     
-    let bodyId = systems[log.StarSystem].BodyID;
+    if (systems[log.StarSystem].bodies[bodyId] === undefined){
+      systems[log.StarSystem].bodies[bodyId] = {important:false};
+    }
     for (let K in body_template) {
       let V = body_template[K];
-      if (systems[log.StarSystem].bodies[bodyId] === undefined){
-        systems[log.StarSystem].bodies[bodyId] = {};
+      if (log[V]!==undefined){
+        systems[log.StarSystem].bodies[bodyId][K] = systems[log.StarSystem].bodies[bodyId][K] || log[V]
       }
-      systems[log.StarSystem].bodies[bodyId][K] = systems[log.StarSystem].bodies[bodyId][K] || log[V] 
     }
+    // @todo remove this.
+    if ("Taurus Dark Region EB-X c1-12 3 c" ==systems[log.StarSystem].bodies[bodyId].body_name ){
+      systems[log.StarSystem].bodies[bodyId].was_mapped = false;
+      systems[log.StarSystem].bodies[bodyId].was_discovered = false;
+      systems[log.StarSystem].bodies[bodyId].important = true;
+    }
+    // @todo remove this.
+    if ("Taurus Dark Region EB-X c1-12 3 d" ==systems[log.StarSystem].bodies[bodyId].body_name ){
+      systems[log.StarSystem].bodies[bodyId].important = true;
+    }
+    
+    let bodies_length = Object.keys(systems[log.StarSystem].bodies).length
+    let full_body_count = systems[log.StarSystem].body_count+systems[log.StarSystem].non_body_count;
+    systems[log.StarSystem].scan_progress = full_body_count < bodies_length ? 0.3 : (bodies_length / full_body_count);
+    
     system_name = systems[log.StarSystem].system_name;
     EDJRData.currentSystem=systems[system_name];
+  }
+  else if(log.event === "FSSDiscoveryScan"){
+    systems[log.SystemName].scan_progress = log.Progress || systems[log.SystemName].scan_progress || 0;
+    systems[log.SystemName].body_count = log.BodyCount || systems[log.SystemName].body_count || 0;
+    systems[log.SystemName].non_body_count = log.NonBodyCount || systems[log.SystemName].non_body_count || 0;
+  }
+  else if(log.event === "FSSAllBodiesFound"){
+    systems[log.SystemName].scan_progress = 1;
   }
   
   return system_name;
@@ -101,13 +141,14 @@ let _socket;
 io.on('connection', function(socket){
   _socket = socket;
   console.log('a user connected');
-  _socket.emit("message", {"action": "update", "EDJRData":EDJRData});
+  _socket.emit("message", {"action": "update", "EDJRData": EDJRData});
   _socket.on('disconnect', function(){
     console.log('user disconnected');
   });
 });
+
 function sendUpdate(){
-  if(_socket.emit("message", {"action": "update", "EDJRData":EDJRData})){
+  if (_socket.emit("message", {"action": "update", "EDJRData": EDJRData})) {
     return true;
   }else{
     return false;
@@ -135,18 +176,18 @@ let tmpfile_path = "./examples/test_tail.log";
 
 // fs.copyFile(file_path, tmpfile_path, function(data){console.log(data)});
 // @todo FIX FOR SOME REASON SKIPPING ALL THE EVENTS I NEED?!
-let line_number = 1;
+var line_number = 0;
 var s = fs.createReadStream(tmpfile_path)
   .pipe(es.split())
   .pipe(es.mapSync(function (line) {
+    line_number += 1;
       new Promise((resolve, reject) => {
         s.pause()
         if (line.length > 0) {
           let json_data = JSON.parse(line);
           let event = json_data.event;
           let name = process_log(json_data);
-          let has_length = name.length;
-          if (process_log(json_data).length > 0) {
+          if (name.length > 0) {
             if (sendUpdate()) {
               console.log("sending update");
               resolve()
@@ -175,9 +216,7 @@ var s = fs.createReadStream(tmpfile_path)
         s.resume();
         return
       });
-
-      line_number = line_number + 1;
-    })
+   })
       .on('error', function (err) {
         console.log('Error while reading file.', err);
       })

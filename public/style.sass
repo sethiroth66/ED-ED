@@ -1,10 +1,30 @@
 
+$ui_button_default: #333333
+$ui_button_hover: #FFFFFF
+
+$button: #240f00
+$button_hover: #ff7100
+
+$_denied: #2c0b0c
+$_denied_hover: #ff0000
+
+$_sky_blue: #1ff6f8
+$_green: #00ff00
+$_color_8: #FFFFFF
+$_color_9: #FFFFFF
+$_color_10: #FFFFFF
+$_color_11: #FFFFFF
+$_color_12: #FFFFFF
+$_yellow: #f1d91e
+$_color_14: #50bbe7
+$_blue: #3ac0ea
+
 $_background: #000000
 $_border: rgb(192, 100, 0)
 $_selected: rgb(77, 145, 254)
 $_font: rgb(204, 204, 204)
-$_green: #6BD425
-$_red: #FF3B00
+$_green: #3a741e
+$_red: #b32900
 
 $header_border: rgb(28, 15, 0)
 $header_background: #c06400
@@ -39,23 +59,43 @@ h2, h3
 .elementStyle
   background: $element_background
   color: $element_font
-
+  
+.grid
+  display: grid
+  grid-template-columns: repeat(2, 1fr)
+  grid-template-rows: 1fr
+  grid-auto-columns: auto // size of the columns
+  grid-auto-rows: auto // size of the rows
+  grid-column-gap: 1px
+  grid-row-gap: 1px
+  align-items: baseline
+  &.cards
+    grid-template-columns: repeat(6, 1fr)
+    grid-gap: 3px
+    @media screen and (max-width: 1400px)
+      grid-template-columns: repeat(5, 1fr)
+    @media screen and (max-width: 1024px)
+      grid-template-columns: repeat(4, 1fr)
+    @media screen and (max-width: 800px)
+      grid-template-columns: repeat(3, 1fr)
+    @media screen and (max-width: 600px)
+      grid-template-columns: repeat(2, 1fr)
+      
+  .grid_1_3
+    //grid-area: auto / auto / 1 / 3
+    grid-row-start: auto
+    grid-row-end: auto
+    grid-column-start: 1
+    grid-column-end: 3
+  
 #currentSystem,
 #targetSystem
   margin-bottom: 1em
   border: 1px solid $_border
 
-  div
-    padding: 0.3em
-
-  .systemName,
-  .starClass
-    display: inline-block
-    width: 49%
-
   .starClass
     text-align: right
-    .scoopable
+    &.scoopable
       background: $_green
 
 progress
@@ -65,23 +105,19 @@ progress
   height: 2.5em
 
   &::-webkit-progress-value
-    animation: animate-glow 1s ease-in-out infinite
+    animation: glowing 1s infinite
     
 .cards
-  display: flex
-  flex-wrap: wrap
   align-items: stretch
   align-content: stretch
   justify-content: flex-start
 
   .card
     border: 1px solid $element_border
-    width: 20%
-    min-width: 200px
-    @media screen and (max-width: $break-small)
-      width: 50%
     &.faded
       opacity: 0.5
+    &.important
+      animation: glowing 3s infinite
 
   .card_header
     width: 100%
@@ -124,3 +160,18 @@ progress
     box-shadow: 0 5px 5px rgba(255, 255, 255, .3) inset, 0 -5px 5px rgba(255, 255, 255, .3) inset
   100%
     box-shadow: 0 5px 5px rgba(255, 255, 255, .7) inset, 0 -5px 5px rgba(255, 255, 255, .7) inset
+    
+@keyframes glowing 
+  0% 
+    border-color: $button_hover
+    box-shadow: 0 0 -10px $_red 
+  40%  
+    box-shadow: 0 0 50px $_red 
+  50%
+    border-color: $_sky_blue
+      
+  60%  
+    box-shadow: 0 0 50px $_red 
+  100% 
+    box-shadow: 0 0 -10px $_red 
+    border-color: $button_hover
