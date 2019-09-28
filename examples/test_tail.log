@@ -1,34 +1,9 @@
 { "timestamp":"2019-09-21T16:54:17Z", "event":"Fileheader", "part":1, "language":"English\\UK", "gameversion":"3.5.0.200 EDH", "build":"r210198/r0 " }
-{ "timestamp":"2019-09-21T16:55:15Z", "event":"Commander", "FID":"F209140", "Name":"sethiroth66" }
-
-{ "timestamp":"2019-09-21T16:55:20Z", "event":"ReceiveText", "From":"", "Message":"$COMMS_entered:#name=Taurus Dark Region EB-X b1-2;", "Message_Localised":"Entered Channel: Taurus Dark Region EB-X b1-2", "Channel":"npc" }
-{ 
-    "timestamp":"2019-09-21T16:55:20Z", 
-    "event":"Location", 
-    "Docked":false, 
-    "StarSystem":"Taurus Dark Region EB-X b1-2", 
-    "SystemAddress":5067389936865, 
-    "StarPos":[-121.06250,-137.81250,-498.65625], 
-    "SystemAllegiance":"", 
-    "SystemEconomy":"$economy_None;", 
-    "SystemEconomy_Localised":"None", 
-    "SystemSecondEconomy":"$economy_None;", 
-    "SystemSecondEconomy_Localised":"None", 
-    "SystemGovernment":"$government_None;", 
-    "SystemGovernment_Localised":"None", 
-    "SystemSecurity":"$GAlAXY_MAP_INFO_state_anarchy;", 
-    "SystemSecurity_Localised":"Anarchy", 
-    "Population":0, 
-    "Body":"Taurus Dark Region EB-X b1-2 A", 
-    "BodyID":1, 
-    "BodyType":"Star" 
-}
-
+{"timestamp":"2019-09-21T16:55:20Z", "event":"Location", "Docked":false, "StarSystem":"Taurus Dark Region EB-X b1-2", "SystemAddress":5067389936865, "StarPos":[-121.06250,-137.81250,-498.65625], "SystemAllegiance":"", "SystemEconomy":"$economy_None;", "SystemEconomy_Localised":"None", "SystemSecondEconomy":"$economy_None;", "SystemSecondEconomy_Localised":"None", "SystemGovernment":"$government_None;", "SystemGovernment_Localised":"None", "SystemSecurity":"$GAlAXY_MAP_INFO_state_anarchy;", "SystemSecurity_Localised":"Anarchy", "Population":0, "Body":"Taurus Dark Region EB-X b1-2 A", "BodyID":1, "BodyType":"Star" 
 { "timestamp":"2019-09-21T16:59:19Z", "event":"FSDTarget", "Name":"Taurus Dark Region BQ-Y c6", "SystemAddress":1732918547058, "RemainingJumpsInRoute":4 }
-
 { "timestamp":"2019-09-21T17:02:51Z", "event":"StartJump", "JumpType":"Hyperspace", "StarSystem":"Taurus Dark Region BQ-Y c6", "SystemAddress":1732918547058, "StarClass":"K" }
-
 { "timestamp":"2019-09-21T17:02:57Z", "event":"FSDTarget", "Name":"Taurus Dark Region BQ-Y d70", "SystemAddress":2415642265915, "RemainingJumpsInRoute":3 }
+
 { "timestamp":"2019-09-21T17:03:09Z", "event":"ReceiveText", "From":"", "Message":"$COMMS_entered:#name=Taurus Dark Region BQ-Y c6;", "Message_Localised":"Entered Channel: Taurus Dark Region BQ-Y c6", "Channel":"npc" }
 { "timestamp":"2019-09-21T17:03:09Z", "event":"FSDJump", "StarSystem":"Taurus Dark Region BQ-Y c6", "SystemAddress":1732918547058, "StarPos":[-114.90625,-113.46875,-484.59375], "SystemAllegiance":"", "SystemEconomy":"$economy_None;", "SystemEconomy_Localised":"None", "SystemSecondEconomy":"$economy_None;", "SystemSecondEconomy_Localised":"None", "SystemGovernment":"$government_None;", "SystemGovernment_Localised":"None", "SystemSecurity":"$GAlAXY_MAP_INFO_state_anarchy;", "SystemSecurity_Localised":"Anarchy", "Population":0, "Body":"Taurus Dark Region BQ-Y c6 A", "BodyID":1, "BodyType":"Star", "JumpDist":28.780, "FuelUsed":4.904880, "FuelLevel":25.714346 }
 { "timestamp":"2019-09-21T17:03:15Z", "event":"Scan", "ScanType":"AutoScan", "BodyName":"Taurus Dark Region BQ-Y c6 A", "BodyID":1, "Parents":[ {"Null":0} ], "StarSystem":"Taurus Dark Region BQ-Y c6", "SystemAddress":1732918547058, "DistanceFromArrivalLS":0.000000, "StarType":"K", "Subclass":1, "StellarMass":0.816406, "Radius":621170112.000000, "AbsoluteMagnitude":5.732559, "Age_MY":12816, "SurfaceTemperature":4967.000000, "Luminosity":"Va", "SemiMajorAxis":2335435390976.000000, "Eccentricity":0.006608, "OrbitalInclination":48.376617, "Periapsis":191.479736, "OrbitalPeriod":27833380864.000000, "RotationPeriod":375390.281250, "AxialTilt":0.000000, "WasDiscovered":true, "WasMapped":false }
@@ -49,80 +24,13 @@
 { "timestamp":"2019-09-21T17:04:47Z", "event":"FSSAllBodiesFound", "SystemName":"Taurus Dark Region BQ-Y d70", "SystemAddress":2415642265915, "Count":1 }
 { "timestamp":"2019-09-21T17:04:56Z", "event":"FSSDiscoveryScan", "Progress":1.000000, "BodyCount":1, "NonBodyCount":0, "SystemName":"Taurus Dark Region BQ-Y d70", "SystemAddress":2415642265915 }
 { "timestamp":"2019-09-21T17:05:11Z", "event":"FuelScoop", "Scooped":2.257636, "Total":27.988268 }
-
-
 { "timestamp":"2019-09-21T17:05:28Z", "event":"StartJump", "JumpType":"Hyperspace", "StarSystem":"Taurus Dark Region EB-X c1-13", "SystemAddress":3657131037306, "StarClass":"K" }
-
 { "timestamp":"2019-09-21T17:05:35Z", "event":"FSDTarget", "Name":"Taurus Dark Region EB-X c1-0", "SystemAddress":83718247034, "RemainingJumpsInRoute":1 }
-
 { "timestamp":"2019-09-21T17:05:47Z", "event":"ReceiveText", "From":"", "Message":"$COMMS_entered:#name=Taurus Dark Region EB-X c1-13;", "Message_Localised":"Entered Channel: Taurus Dark Region EB-X c1-13", "Channel":"npc" }
-
-
 { "timestamp":"2019-09-21T17:05:47Z", "event":"FSDJump", "StarSystem":"Taurus Dark Region EB-X c1-13", "SystemAddress":3657131037306, "StarPos":[-86.78125,-75.71875,-456.81250], "SystemAllegiance":"", "SystemEconomy":"$economy_None;", "SystemEconomy_Localised":"None", "SystemSecondEconomy":"$economy_None;", "SystemSecondEconomy_Localised":"None", "SystemGovernment":"$government_None;", "SystemGovernment_Localised":"None", "SystemSecurity":"$GAlAXY_MAP_INFO_state_anarchy;", "SystemSecurity_Localised":"Anarchy", "Population":0, "Body":"Taurus Dark Region EB-X c1-13", "BodyID":0, "BodyType":"Star", "JumpDist":27.333, "FuelUsed":4.257051, "FuelLevel":23.731216 }
-
 { "timestamp":"2019-09-21T17:05:47Z", "event":"Powerplay", "Power":"Aisling Duval", "Rank":0, "Merits":0, "Votes":0, "TimePledged":1188408 }
-
-{ "timestamp":"2019-09-21T17:05:52Z", 
-    "event":"Scan", 
-    "ScanType":"AutoScan", 
-    "BodyName":"Taurus Dark Region EB-X c1-13", 
-    "BodyID":0, 
-    "StarSystem":"Taurus Dark Region EB-X c1-13", 
-    "SystemAddress":3657131037306, 
-    "DistanceFromArrivalLS":0.000000, 
-    "StarType":"K", 
-    "Subclass":7, 
-    "StellarMass":0.515625, 
-    "Radius":497364800.000000, 
-    "AbsoluteMagnitude":7.001190, 
-    "Age_MY":294, 
-    "SurfaceTemperature":4145.000000, 
-    "Luminosity":"Va", 
-    "RotationPeriod":212119.296875, 
-    "AxialTilt":0.000000, 
-    "Rings":[ { "Name":"Taurus Dark Region EB-X c1-13 A Belt", 
-    "RingClass":"eRingClass_Rocky", 
-    "MassMT":3.6181e+11, 
-    "InnerRad":7.4653e+08, 
-    "OuterRad":1.935e+09 } ], 
-    "WasDiscovered":true, 
-    "WasMapped":false }
-
-{ "timestamp":"2019-09-21T17:05:52Z", "event":"Scan", "ScanType":"AutoScan", "BodyName":"Taurus Dark Region EB-X c1-13 A Belt Cluster 9", "BodyID":10, "Parents":[ {"Ring":1}, {"Star":0} ], "StarSystem":"Taurus Dark Region EB-X c1-13", "SystemAddress":3657131037306, "DistanceFromArrivalLS":3.223374, "WasDiscovered":true, "WasMapped":false }
-
-{ "timestamp":"2019-09-21T17:05:52Z", 
-    "event":"Scan", 
-    "ScanType":"AutoScan", 
-    "BodyName":"Taurus Dark Region EB-X c1-13 1", 
-    "BodyID":13, 
-    "Parents":[ {"Star":0} ], 
-    "StarSystem":"Taurus Dark Region EB-X c1-13", 
-    "SystemAddress":3657131037306, 
-    "DistanceFromArrivalLS":12.520317, 
-    "TidalLock":true, 
-    "TerraformState":"", 
-    "PlanetClass":"High metal content body", 
-    "Atmosphere":"", 
-    "AtmosphereType":"None", 
-    "Volcanism":"rocky magma volcanism", 
-    "MassEM":0.005381, 
-    "Radius":1150701.750000, 
-    "SurfaceGravity":1.619604, 
-    "SurfaceTemperature":957.692993, 
-    "SurfacePressure":0.000000, 
-    "Landable":true, 
-    "Materials":[ ... ], 
-    "Composition":{ ... }, 
-    "SemiMajorAxis":3753502464.000000, 
-    "Eccentricity":0.000008, 
-    "OrbitalInclination":-0.000138, 
-    "Periapsis":354.487701, 
-    "OrbitalPeriod":174109.578125, 
-    "RotationPeriod":174649.296875, 
-    "AxialTilt":-0.280003, 
-    "WasDiscovered":true, 
-    "WasMapped":false }
-
+{ "timestamp":"2019-09-21T17:05:52Z", "event":"Scan", "ScanType":"AutoScan", "BodyName":"Taurus Dark Region EB-X c1-13", "BodyID":0, "StarSystem":"Taurus Dark Region EB-X c1-13", "SystemAddress":3657131037306, "DistanceFromArrivalLS":0.000000, "StarType":"K", "Subclass":7, "StellarMass":0.515625, "Radius":497364800.000000, "AbsoluteMagnitude":7.001190, "Age_MY":294, "SurfaceTemperature":4145.000000, "Luminosity":"Va", "RotationPeriod":212119.296875, "AxialTilt":0.000000, "Rings":[ { "Name":"Taurus Dark Region EB-X c1-13 A Belt", "RingClass":"eRingClass_Rocky", "MassMT":3.6181e+11, "InnerRad":7.4653e+08, "OuterRad":1.935e+09 } ], "WasDiscovered":true, "WasMapped":false }{ "timestamp":"2019-09-21T17:05:52Z", "event":"Scan", "ScanType":"AutoScan", "BodyName":"Taurus Dark Region EB-X c1-13 A Belt Cluster 9", "BodyID":10, "Parents":[ {"Ring":1}, {"Star":0} ], "StarSystem":"Taurus Dark Region EB-X c1-13", "SystemAddress":3657131037306, "DistanceFromArrivalLS":3.223374, "WasDiscovered":true, "WasMapped":false }
+{ "timestamp":"2019-09-21T17:05:52Z", "event":"Scan", "ScanType":"AutoScan", "BodyName":"Taurus Dark Region EB-X c1-13 1", "BodyID":13, "Parents":[ {"Star":0} ], "StarSystem":"Taurus Dark Region EB-X c1-13", "SystemAddress":3657131037306, "DistanceFromArrivalLS":12.520317, "TidalLock":true, "TerraformState":"", "PlanetClass":"High metal content body", "Atmosphere":"", "AtmosphereType":"None", "Volcanism":"rocky magma volcanism", "MassEM":0.005381, "Radius":1150701.750000, "SurfaceGravity":1.619604, "SurfaceTemperature":957.692993, "SurfacePressure":0.000000, "Landable":true, "Materials":[ ... ], "Composition":{ ... }, "SemiMajorAxis":3753502464.000000, "Eccentricity":0.000008, "OrbitalInclination":-0.000138, "Periapsis":354.487701, "OrbitalPeriod":174109.578125, "RotationPeriod":174649.296875, "AxialTilt":-0.280003, "WasDiscovered":true, "WasMapped":false }
 { "timestamp":"2019-09-21T17:05:52Z", "event":"Scan", "ScanType":"AutoScan", "BodyName":"Taurus Dark Region EB-X c1-13 A Belt Cluster 7", "BodyID":8, "Parents":[ {"Ring":1}, {"Star":0} ], "StarSystem":"Taurus Dark Region EB-X c1-13", "SystemAddress":3657131037306, "DistanceFromArrivalLS":4.494678, "WasDiscovered":true, "WasMapped":false }
 { "timestamp":"2019-09-21T17:05:52Z", "event":"Scan", "ScanType":"AutoScan", "BodyName":"Taurus Dark Region EB-X c1-13 A Belt Cluster 11", "BodyID":12, "Parents":[ {"Ring":1}, {"Star":0} ], "StarSystem":"Taurus Dark Region EB-X c1-13", "SystemAddress":3657131037306, "DistanceFromArrivalLS":2.519025, "WasDiscovered":true, "WasMapped":false }
 { "timestamp":"2019-09-21T17:05:52Z", "event":"Scan", "ScanType":"AutoScan", "BodyName":"Taurus Dark Region EB-X c1-13 A Belt Cluster 4", "BodyID":5, "Parents":[ {"Ring":1}, {"Star":0} ], "StarSystem":"Taurus Dark Region EB-X c1-13", "SystemAddress":3657131037306, "DistanceFromArrivalLS":5.608468, "WasDiscovered":true, "WasMapped":false }

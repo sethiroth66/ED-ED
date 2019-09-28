@@ -27,24 +27,28 @@ h2, h3 {
 }
 
 #currentSystem,
-#nextSystem {
+#targetSystem {
   margin-bottom: 1em;
   border: 1px solid #c06400;
 }
 #currentSystem div,
-#nextSystem div {
+#targetSystem div {
   padding: 0.3em;
 }
 #currentSystem .systemName,
 #currentSystem .starClass,
-#nextSystem .systemName,
-#nextSystem .starClass {
+#targetSystem .systemName,
+#targetSystem .starClass {
   display: inline-block;
   width: 49%;
 }
 #currentSystem .starClass,
-#nextSystem .starClass {
+#targetSystem .starClass {
   text-align: right;
+}
+#currentSystem .starClass .scoopable,
+#targetSystem .starClass .scoopable {
+  background: #6BD425;
 }
 
 progress {
@@ -57,23 +61,12 @@ progress::-webkit-progress-value {
   animation: animate-glow 1s ease-in-out infinite;
 }
 
-@keyframes animate-glow {
-  0% {
-    box-shadow: 0 5px 5px rgba(255, 255, 255, 0.7) inset, 0 -5px 5px rgba(255, 255, 255, 0.7) inset;
-  }
-  50% {
-    box-shadow: 0 5px 5px rgba(255, 255, 255, 0.3) inset, 0 -5px 5px rgba(255, 255, 255, 0.3) inset;
-  }
-  100% {
-    box-shadow: 0 5px 5px rgba(255, 255, 255, 0.7) inset, 0 -5px 5px rgba(255, 255, 255, 0.7) inset;
-  }
-}
 .cards {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
   align-content: stretch;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .cards .card {
   border: 1px solid #c06400;
@@ -84,6 +77,9 @@ progress::-webkit-progress-value {
   .cards .card {
     width: 50%;
   }
+}
+.cards .card.faded {
+  opacity: 0.5;
 }
 .cards .card_header {
   width: 100%;
@@ -121,6 +117,18 @@ progress::-webkit-progress-value {
 .body_name {
   display: block;
   width: 100%;
+}
+
+@keyframes animate-glow {
+  0% {
+    box-shadow: 0 5px 5px rgba(255, 255, 255, 0.7) inset, 0 -5px 5px rgba(255, 255, 255, 0.7) inset;
+  }
+  50% {
+    box-shadow: 0 5px 5px rgba(255, 255, 255, 0.3) inset, 0 -5px 5px rgba(255, 255, 255, 0.3) inset;
+  }
+  100% {
+    box-shadow: 0 5px 5px rgba(255, 255, 255, 0.7) inset, 0 -5px 5px rgba(255, 255, 255, 0.7) inset;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

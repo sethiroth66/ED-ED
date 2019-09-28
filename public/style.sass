@@ -1,8 +1,10 @@
 
 $_background: #000000
-$_border: #c06400
-$_selected: rgb(77, 144, 254)
+$_border: rgb(192, 100, 0)
+$_selected: rgb(77, 145, 254)
 $_font: rgb(204, 204, 204)
+$_green: #6BD425
+$_red: #FF3B00
 
 $header_border: rgb(28, 15, 0)
 $header_background: #c06400
@@ -39,7 +41,7 @@ h2, h3
   color: $element_font
 
 #currentSystem,
-#nextSystem
+#targetSystem
   margin-bottom: 1em
   border: 1px solid $_border
 
@@ -53,6 +55,8 @@ h2, h3
 
   .starClass
     text-align: right
+    .scoopable
+      background: $_green
 
 progress
   -webkit-appearance: none
@@ -62,21 +66,13 @@ progress
 
   &::-webkit-progress-value
     animation: animate-glow 1s ease-in-out infinite
-
-@keyframes animate-glow
-  0%
-    box-shadow: 0 5px 5px rgba(255, 255, 255, .7) inset, 0 -5px 5px rgba(255, 255, 255, .7) inset
-  50%
-    box-shadow: 0 5px 5px rgba(255, 255, 255, .3) inset, 0 -5px 5px rgba(255, 255, 255, .3) inset
-  100%
-    box-shadow: 0 5px 5px rgba(255, 255, 255, .7) inset, 0 -5px 5px rgba(255, 255, 255, .7) inset
-
+    
 .cards
   display: flex
   flex-wrap: wrap
   align-items: stretch
   align-content: stretch
-  justify-content: space-between
+  justify-content: flex-start
 
   .card
     border: 1px solid $element_border
@@ -84,6 +80,8 @@ progress
     min-width: 200px
     @media screen and (max-width: $break-small)
       width: 50%
+    &.faded
+      opacity: 0.5
 
   .card_header
     width: 100%
@@ -118,3 +116,11 @@ progress
 .body_name
   display: block
   width: 100%
+  
+@keyframes animate-glow
+  0%
+    box-shadow: 0 5px 5px rgba(255, 255, 255, .7) inset, 0 -5px 5px rgba(255, 255, 255, .7) inset
+  50%
+    box-shadow: 0 5px 5px rgba(255, 255, 255, .3) inset, 0 -5px 5px rgba(255, 255, 255, .3) inset
+  100%
+    box-shadow: 0 5px 5px rgba(255, 255, 255, .7) inset, 0 -5px 5px rgba(255, 255, 255, .7) inset

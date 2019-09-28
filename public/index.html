@@ -8,79 +8,68 @@
     <script src="/vue.js"></script>
 </head>
 <body id="EDJR">
+
+    <div v-if="system.name.length" id="targetSystem">
+        <h2>Target System:</h2>
+        <h3 class="systemName">{{system.system_name}}</h3>
+        <div v-bind:class="{'scoopable': scoopable}" class="starClass">{{system.star_class}}</div>
+    </div>
+
     <div id="currentSystem" class="">
         <h2>Current System:</h2>
-        <h3 class="systemName">{{system.name}}</h3>
+        <h3 class="systemName">{{system.system_name}}</h3>
         <div class="starClass">{{system.star_class}}</div>
         <div class="systemDiscovered">Discovered already?</div>
         <div class="systemDiscovered">{{system.was_discovered}}</div>
         <progress id="systemScanProgress" max="1" :value="system.scan_progress"></progress>
-    </div>
-    
-    <div id="nextSystem">
-        <h2>Target System:</h2>
-        <h3 class="systemName">Taurus Dark Region EB-X b1-2</h3>
-        <div class="starClass">{{ star_class }}</div>
-    </div>
         
-    <div id="bodies" class="cards">
-
-        <div v-for="body in bodies" class="card elementStyle">
-            <div class="card_header">
-                <h3 class="body_name">Taurus Dark Region EB-X b1-2 A 3 C</h3>
-            </div>
-            <div class="card_body">
-                <div class="row2">
-                    <div>Discovered</div>
-                    <div>{{ body.was_discovered }}</div>
+        <div v-if="system.bodies.length" id="bodies" class="cards">
+            <div v-for="body in system.bodies" v-bind:class="{ 'faded':body.was_discovered }" class="card elementStyle">
+                <div class="card_header">
+                    <h3 class="body_name">{{body.name}}</h3>
                 </div>
-                <div class="row2">
-                    <div>mapped</div>
-                    <div>{{ body.was_mapped }}</div>
+                <div class="card_body">
+                    <div class="row2">
+                        <div>Discovered</div>
+                        <div>{{ body.was_discovered }}</div>
+                    </div>
+                    <div class="row2">
+                        <div>mapped</div>
+                        <div>{{ body.was_mapped }}</div>
+                    </div>
                 </div>
             </div>
         </div>
-<!--        <div class="card elementStyle">{{system.body[2]}}</div>-->
-<!--        <div class="card elementStyle">{{system.body[3]}}</div>-->
+        
     </div>
 
 </body>
 <script type="text/javascript">
   let EDJR = {
-    currentSystem:{
-      name: "test",
-      star_class: "",
-      was_discovered: "",
-      scan_progress: 0
-    },
-    nextSystem:{},
-    bodies: []
+    currentSystem: {},
+    targetSystem:{}
   };
 
   let currentSystem = new Vue({
     el: '#currentSystem',
     data: {system:EDJR.currentSystem}
   })
-
-  let bodies = new Vue({
-    el: "#bodies",
-    data: {bodies:EDJR.bodies},
+  let targetSystem = new Vue({
+    el: '#targetSystem',
+    data: {system:EDJR.targetSystem}
   })
 
   var socket = io();
   socket.on("message", function (d, a) {
     if (d.action === "update") {
-      EDJR = d.EDJRData;
-      currentSystem._data.system = EDJR.currentSystem;
-      bodies._data.bodies = EDJR.bodies.bodies;
+      currentSystem._data.system = d.EDJRData.currentSystem;
+      targetSystem._data.system = d.EDJRData.targetSystem;
     }
-    if (d.action === "updateCurrentSystem") {
-      EDJR.currentSystem = d.data;
-      currentSystem._data.system = EDJR.currentSystem;
+    else if (d.action === "updateCurrent") {
+      currentSystem._data.system = d.EDJRData;
     }
-    if (d.action === "updateBodies") {
-      EDJR.bodies = d.data;
-      bodies._data.bodies = EDJR.bodies;
+    else if (d.action === "updateTarget") {
+      targetSystem._data.system = d.EDJRData;
     }
   })
 </script>

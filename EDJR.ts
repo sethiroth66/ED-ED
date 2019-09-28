@@ -25,7 +25,7 @@ export class EDJR {
     primary_bodies?: number
     _events: Array<EliteJournal>
   };
-  public next_system: {
+  public target_system: {
     name: string,
     star_type: string,
     scoopable: boolean | false
@@ -59,14 +59,14 @@ export class EDJR {
 
   // Targeted a system to jump to ( pre StartJump )
   public FSDTarget(data: FSDTarget) {
-    this.next_system.name = data.Name;
+    this.target_system.name = data.Name;
   }
 
   // Begun jumping to a system (post FSDTarget, pre FSDJump)
   public StartJump(data: StartJump) {
-    this.next_system.name = data.StarSystem;
-    this.next_system.star_type = data.StarClass;
-    this.next_system.scoopable = !!"KGBFOAM".indexOf(data.StarClass.toUpperCase());
+    this.target_system.name = data.StarSystem;
+    this.target_system.star_type = data.StarClass;
+    this.target_system.scoopable = !!"KGBFOAM".indexOf(data.StarClass.toUpperCase());
   }
 
   // Dropped into a system
