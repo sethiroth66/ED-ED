@@ -16,9 +16,21 @@ let systems = {
 };
 
 let EDJRData = {
+  ship_status: {
+    max_fuel: 0, 
+    fuel_level: 0,
+    fuel_warn: false,
+    fuel_critical: false
+  },
   currentSystem : systems['__blank__'],
   targetSystem : systems['__blank__'],
 }
+
+let fs = require("fs");
+let app = require('express')();
+let http = require('http').createServer(app);
+let io = require('socket.io')(http);
+let os = require('os');
 
 function process_log(log){
   let system_name ="";
@@ -42,74 +54,110 @@ function process_log(log){
     "planet_landable": "Landable"
   };
   let scoopable_types = ["K","G","B","F","O","A","M",];
+  
+  if (log.FuelLevel!==undefined){
+    EDJRData.ship_status.fuel_level =log.FuelLevel;
+    EDJRData.ship_status.fuel_warn = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel / 2));
+    EDJRData.ship_status.fuel_critical = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel / 4));
+  }
+  
   if (log.event==="Location"){
-    
-    if (systems[log.StarSystem]===undefined){
+
+    if (systems[log.StarSystem] === undefined) {
       systems[log.StarSystem] = JSON.parse(JSON.stringify( systems['__blank__']));
       systems[log.StarSystem].system_name = log.StarSystem;
-      system_name = systems[log.StarSystem].system_name;
+      system_name = systems[log.StarSystem].system_name;    
     }
-    EDJRData.targetSystem = systems[system_name];
     
+    EDJRData.currentSystem = systems[system_name];
+    EDJRData.targetSystem = systems[system_name];
+
+  }
+  else if (log.event==="Loadout"){
+    EDJRData.ship_status.max_fuel = log.FuelCapacity.Main
   }
   else if(log.event==="FSDTarget"){
-    if (log.StarSystem===undefined) log.StarSystem = log.Name;
-    
-    if (systems[log.StarSystem]===undefined){
-      systems[log.StarSystem] = JSON.parse(JSON.stringify( systems['__blank__']));
-      systems[log.StarSystem].system_name = log.StarSystem;
-      systems[log.StarSystem].scoopable = false;
-      system_name = systems[log.StarSystem].system_name;
+    let name;
+    if (log.Name && log.Name.length){
+      name = log.Name
     }
-    EDJRData.targetSystem = systems[system_name];
+    // forward thinking for if name gets changed to StarSystem. This is in documentation, but not used in logs...
+    if (log.StarSystem && log.StarSystem.length){
+      name = log.StarSystem
+    }
+    // For some reason this event uses "Name" instead of "StarSystem".
+    if (systems[name] === undefined) {
+      systems[name] = JSON.parse(JSON.stringify( systems['__blank__']));
+      systems[name].system_name = name;
+      system_name = systems[name].system_name;
+    }else{
+      system_name = name;
+    }
     
+    EDJRData.targetSystem = systems[system_name];
   }
   else if(log.event === "StartJump"){
-    
+
     systems[log.StarSystem].system_name = log.StarSystem;
     systems[log.StarSystem].star_class = log.StarClass;
     systems[log.StarSystem].scoopable = scoopable_types.includes(systems[log.StarSystem].star_class);
     system_name = systems[log.StarSystem].system_name;
-    
+    EDJRData.currentSystem = systems[system_name]
+
+  }
+  else if(log.event === "FuelScoop"){
+    EDJRData.ship_status.fuel_level = log.Total;
+    if (EDJRData.ship_status.fuel_warn||EDJRData.ship_status.fuel_critical){
+      EDJRData.ship_status.fuel_warn = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel));
+      EDJRData.ship_status.fuel_critical = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel / 2));
+    }
   }
   else if(log.event === "FSDJump"){
     //main body
     systems[log.StarSystem].main_body = log.BodyID.toFixed(0);
     system_name = systems[log.StarSystem].system_name;
-    EDJRData.targetSystem=systems['__blank__'];
+    // EDJRData.targetSystem=systems['__blank__'];
     EDJRData.currentSystem=systems[system_name];
   }
   else if(log.event === "Scan"){
+    if (systems[log.StarSystem] === undefined) {
+      systems[log.StarSystem] = JSON.parse(JSON.stringify( systems['__blank__']));
+      systems[log.StarSystem].system_name = log.StarSystem;
+      system_name = systems[log.StarSystem].system_name;
+    }
     let bodyId = log.BodyID.toFixed(0);
-    if (bodyId === systems[log.StarSystem].main_body) {
+    if (systems[log.StarSystem].main_body!==undefined && bodyId === systems[log.StarSystem].main_body) {
       // this is the main star, consider some system details here
       systems[log.StarSystem].was_discovered = log.WasDiscovered;
     }
-    
+
     if (systems[log.StarSystem].bodies[bodyId] === undefined){
       systems[log.StarSystem].bodies[bodyId] = {important:false};
     }
+    // copy properties from the scan
+    let body = systems[log.StarSystem].bodies[bodyId];
     for (let K in body_template) {
       let V = body_template[K];
       if (log[V]!==undefined){
-        systems[log.StarSystem].bodies[bodyId][K] = systems[log.StarSystem].bodies[bodyId][K] || log[V]
+        body[K] = body[K] || log[V]
       }
     }
-    // @todo remove this.
-    if ("Taurus Dark Region EB-X c1-12 3 c" ==systems[log.StarSystem].bodies[bodyId].body_name ){
-      systems[log.StarSystem].bodies[bodyId].was_mapped = false;
-      systems[log.StarSystem].bodies[bodyId].was_discovered = false;
-      systems[log.StarSystem].bodies[bodyId].important = true;
-    }
-    // @todo remove this.
-    if ("Taurus Dark Region EB-X c1-12 3 d" ==systems[log.StarSystem].bodies[bodyId].body_name ){
-      systems[log.StarSystem].bodies[bodyId].important = true;
+    // determine if the star type is scoopable
+    if (body.star_type){
+      body.scoopable = scoopable_types.includes(body.star_type);
     }
     
+    // remove belt clusters
+    body.belt_cluster = !!body.body_name.match(/BELT CLUSTER/i);
+    
+    // set planet_class 'class' :P
+    body.planet_class_class = body.planet_class.toLowerCase().replace(/[^a-z]/g,"_");
+    
+    // update progress
     let bodies_length = Object.keys(systems[log.StarSystem].bodies).length
     let full_body_count = systems[log.StarSystem].body_count+systems[log.StarSystem].non_body_count;
     systems[log.StarSystem].scan_progress = full_body_count < bodies_length ? 0.3 : (bodies_length / full_body_count);
-    
+
     system_name = systems[log.StarSystem].system_name;
     EDJRData.currentSystem=systems[system_name];
   }
@@ -121,14 +169,26 @@ function process_log(log){
   else if(log.event === "FSSAllBodiesFound"){
     systems[log.SystemName].scan_progress = 1;
   }
-  
+
+  else if(log.event === "SAAScanComplete"){
+    EDJRData.currentSystem.bodies[log.BodyID].was_mapped="scanned"
+  }
+
   return system_name;
 }
 
-let fs = require("fs");
-let app = require('express')();
-let http = require('http').createServer(app);
-let io = require('socket.io')(http);
+function get_latest_file() {
+  let path = os.userInfo().homedir + "/Saved Games/Frontier Developments/Elite Dangerous/";
+  let files_array = fs.readdirSync(path);
+  let journals = [];
+  for (let file of files_array) {
+    if (file.match(/^journal\.\d+\.\d+\.log/i)) {
+      journals.push(file);
+    }
+  }
+  journals = journals.reverse();
+  return journals[0].length ? path + journals[0] : false;
+}
 
 // setup web application serve
 app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
@@ -138,6 +198,7 @@ app.get('/vue.js', (req, res) => res.sendFile(__dirname + '/public/vue.js'));
 http.listen(3000, () => console.info('Serving silver platter to http://127.0.0.1:3000'));
 
 let _socket;
+
 io.on('connection', function(socket){
   _socket = socket;
   console.log('a user connected');
@@ -147,20 +208,6 @@ io.on('connection', function(socket){
   });
 });
 
-function sendUpdate(){
-  if (_socket.emit("message", {"action": "update", "EDJRData": EDJRData})) {
-    return true;
-  }else{
-    return false;
-  }
-}
-function sendUpdateCurrent(){
-  _socket.emit("message", {"action": "updateCurrent", "EDJRData":EDJRData.currentSystem});
-}
-function sendUpdateTarget(){
-  _socket.emit("message", {"action": "updateTarget", "EDJRData":EDJRData.currentSystem});
-}
-
 // return;
 
 let es = require("event-stream");
@@ -169,59 +216,102 @@ let Tail = require('tail').Tail;
 // let tmpfile_path = "./examples/Journal.190921175417.01.log";
 let tmpfile_path = "./examples/test_tail.log";
 
-// let tail_options = {follow: true,useWatchFile: true,flushAtEOF: true};
-// tail = new Tail(tmpfile_path,tail_options);
-// tail.on("error", data => console.error(data));
-// tail.on("line", data => console.log(data));
-
-// fs.copyFile(file_path, tmpfile_path, function(data){console.log(data)});
-// @todo FIX FOR SOME REASON SKIPPING ALL THE EVENTS I NEED?!
-var line_number = 0;
-var s = fs.createReadStream(tmpfile_path)
-  .pipe(es.split())
-  .pipe(es.mapSync(function (line) {
-    line_number += 1;
-      new Promise((resolve, reject) => {
-        s.pause()
+function new_tail_watcher(){
+  let file_path = get_latest_file();
+  if (file_path && file_path.length){
+    console.info(file_path);
+    let tail_options = {fromBeginning: true,follow: true,useWatchFile: true,flushAtEOF: true};
+    tail = new Tail(file_path,tail_options);
+    tail.on("error", function (data) {
+      console.error("error tailing or something");
+      console.log(data);
+    });
+    tail.on("line", function (line) {
+      new Promise(function (resolve, reject) {
         if (line.length > 0) {
           let json_data = JSON.parse(line);
           let event = json_data.event;
-          let name = process_log(json_data);
-          if (name.length > 0) {
-            if (sendUpdate()) {
-              console.log("sending update");
-              resolve()
-              return;
-            }else{
-              reject({"code": 3, "message":"send update failed?"});
-              return;
-            }
-          } else {
-            reject({"code": 1, "message": "Not listening for this event?"})
+          if (event==="Music"){
+            reject()
             return;
           }
-        }else{
-          reject({"code": 2, "message": "empty line"})
-          return;
+          console.log(event);
+          let name = process_log(json_data);
+          if (event==="Continue" ){
+            console.log("switching file?!")
+            tail.unwatch();
+            setTimeout(function(){
+              new_tail_watcher();
+              reject()
+            },5000);
+          }
+          if (event==="Shutdown"){
+            tail.unwatch();
+            reject();
+          }
+          if (name.length > 0) {
+            // console.log(json_data);
+              resolve()
+          } else {
+              resolve()
+          }
         }
-      }).then((data) => {
-        s.resume();
-        return
-      }).catch((reason) => {
-        if (reason.code === 1 || reason.code === 2) {
-          // console.warn(reason);
-        } else {
-          console.error("Something went wrong...")
-        }
-        s.resume();
-        return
-      });
-   })
-      .on('error', function (err) {
-        console.log('Error while reading file.', err);
+      }).then(function(data){
+        _socket.emit("message", {"action": "update", "EDJRData": EDJRData})
+      }).catch(function(data){
+          
       })
-      .on('end', function () {
-        console.log('Read entire file.')
-        console.log(systems)
-      })
-  );
+      
+    });
+  }
+  else{
+    console.log("something went wrong finding file to watch");
+    setTimeout(function(){
+      new_tail_watcher()
+    },2000);
+  }
+}
+new_tail_watcher();
+// fs.copyFile(file_path, tmpfile_path, function(data){console.log(data)});
+// var line_number = 0;
+// var s = fs.createReadStream(tmpfile_path)
+//   .pipe(es.split())
+//   .pipe(es.mapSync(function (line) {
+//     line_number += 1;
+//       new Promise((resolve, reject) => {
+//         s.pause()
+//         if (line.length > 0) {
+//           let json_data = JSON.parse(line);
+//           let event = json_data.event;
+//           let name = process_log(json_data);
+//           if (name.length > 0) {
+//             if (_socket.emit("message", {"action": "update", "EDJRData": EDJRData})) {
+//               resolve()
+//             }else{
+//               reject({"code": 3, "message":"send update failed?"});
+//             }
+//           } else {
+//             reject({"code": 1, "message": "Not listening for this event?"})
+//           }
+//         }else{
+//           reject({"code": 2, "message": "empty line"})
+//         }
+//       }).then((data) => {
+//         s.resume();
+//       }).catch((reason) => {
+//         if (reason.code === 1 || reason.code === 2) {
+//           // console.warn(reason);
+//         } else {
+//           console.error("Something went wrong...")
+//         }
+//         s.resume();
+//       });
+//    })
+//       .on('error', function (err) {
+//         console.log('Error while reading file.', err);
+//       })
+//       .on('end', function () {
+//         console.log('Read entire file.')
+//         // console.log(systems)
+//       })
+//   );

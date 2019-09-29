@@ -1,36 +1,41 @@
 
+$_blue: #1ff6f8
+$_green: #00ff00
+$_orange: #ff7100
+$_red: #ff0000
+$_yellow: #f1d91e
+$_baby_blue: #3ac0ea
+$_black: #000000
+$_white: #FFFFFF
+
 $ui_button_default: #333333
 $ui_button_hover: #FFFFFF
 
 $button: #240f00
-$button_hover: #ff7100
+$button_hover: $_orange
+
+$glow_color: #ff710000
+$glow_color_: #ff7100ff
 
 $_denied: #2c0b0c
-$_denied_hover: #ff0000
+$_denied_hover: $_red
 
-$_sky_blue: #1ff6f8
-$_green: #00ff00
-$_color_8: #FFFFFF
 $_color_9: #FFFFFF
 $_color_10: #FFFFFF
 $_color_11: #FFFFFF
 $_color_12: #FFFFFF
-$_yellow: #f1d91e
 $_color_14: #50bbe7
-$_blue: #3ac0ea
 
 $_background: #000000
-$_border: rgb(192, 100, 0)
-$_selected: rgb(77, 145, 254)
+$_border: $_orange
+$_selected: $_blue
 $_font: rgb(204, 204, 204)
-$_green: #3a741e
-$_red: #b32900
 
 $header_border: rgb(28, 15, 0)
-$header_background: #c06400
+$header_background: $_orange
 $header_font: #000000
 
-$element_border: #c06400
+$element_border: $_orange
 $element_background: rgb(56, 29, 0)
 $element_font: rgb(204, 204, 204)
 
@@ -88,6 +93,7 @@ h2, h3
     grid-column-start: 1
     grid-column-end: 3
   
+#shipStatus,
 #currentSystem,
 #targetSystem
   margin-bottom: 1em
@@ -95,17 +101,27 @@ h2, h3
 
   .starClass
     text-align: right
-    &.scoopable
-      background: $_green
-
+.scoopable
+  background: $_green
+  color: $_black
+  animation: scoopable_glow 2s infinite linear
+  
 progress
   -webkit-appearance: none
   appearance: none
   width: 100%
   height: 2.5em
+  
+  &[value='1']::-webkit-progress-value,
+  &[value='1']::-moz-progress-bar
+    background: $button_hover
+  &::-webkit-progress-value,
+  &::-moz-progress-bar
+    background: $_yellow
+      //background: linear-gradient(90deg, transparent 25%, transparent 75%, #fefbe3 75%)
+      //background-size: 100% 100%
+      //animation: barberpole 5s infinite linear
 
-  &::-webkit-progress-value
-    animation: glowing 1s infinite
     
 .cards
   align-items: stretch
@@ -121,21 +137,6 @@ progress
 
   .card_header
     width: 100%
-
-.row2
-  display: block
-
-  div
-    display: inline-block
-
-    &:first-child
-      width: 50%
-      float: left
-
-    &:last-child
-      width: 50%
-      float: left
-      text-align: right
 
 .body_icon
   height: 2.5em
@@ -153,13 +154,69 @@ progress
   display: block
   width: 100%
   
+  
+.asteroid_cluster
+  background-color: $_white
+.metal_rich_body,
+.high_metal_content_body,
+.rocky_body
+  background-color: #7f7f7f
+  color: $_black
+.icy_body,
+.rocky_ice_body
+  background-color: #00ffff
+  color: $_black
+.earthlike_world,.earthlike_body
+  background-color: #00ff00
+  color: $_black
+.amonia_world
+  background-color: #7f7f7f
+  color: $_black
+.water_world,
+.water_giant,
+.water_giant_with_life,
+.gas_giant_with_ammonia_based_life,
+.gas_giant_with_water_based_life
+  background-color: #0000ff
+.sudarsky_class_i_gas_giant,
+.sudarsky_class_ii_gas_giant,
+.sudarsky_class_iii_gas_giant,
+.sudarsky_class_iv_gas_giant,
+.sudarsky_class_v_gas_giant,
+.helium_rich_gas_giant,
+.helium_gas_giant
+  background-color: #ff7f00
+  color: $_black
+  
+
+
+  
 @keyframes animate-glow
   0%
-    box-shadow: 0 5px 5px rgba(255, 255, 255, .7) inset, 0 -5px 5px rgba(255, 255, 255, .7) inset
+    //box-shadow: 0 5px 5px $glow_color_, 0 -5px 5px $glow_color_
+    //box-shadow: 0 0px 5px $glow_color_, 0 0px 5px $glow_color_
+  10%
+    box-shadow: 5px 0px 5px $glow_color_, 5px 0px 5px $glow_color_
+  20%
+    box-shadow: 5px 5px 5px $glow_color_, 5px 5px 5px $glow_color_
+  30%
+    box-shadow: 0px 5px 5px $glow_color_, 0px 5px 5px $glow_color_
+  40%
+    box-shadow: -5px 5px 5px $glow_color_, -5px 5px 5px $glow_color_
   50%
-    box-shadow: 0 5px 5px rgba(255, 255, 255, .3) inset, 0 -5px 5px rgba(255, 255, 255, .3) inset
+    box-shadow: -5px 0px 5px $glow_color_, -5px 0px 5px $glow_color_
+  60%
+    box-shadow: -5px -5px 5px $glow_color_, -5px -5px 5px $glow_color_
+  70%
+    box-shadow: 0px -5px 5px $glow_color_, 0px -5px 5px $glow_color_
+  80%
+    box-shadow: 5px -5px 5px $glow_color_, 5px -5px 5px $glow_color_
   100%
-    box-shadow: 0 5px 5px rgba(255, 255, 255, .7) inset, 0 -5px 5px rgba(255, 255, 255, .7) inset
+    box-shadow: 5px 0px 5px $glow_color_, 5px 0px 5px $glow_color_
+  //50%
+  //  box-shadow: 0 5px 5px $glow_color_, 0 -5px 5px $glow_color_
+  //100%
+  //  box-shadow: 0 5px 5px $glow_color_, 0 -5px 5px $glow_color_
     
 @keyframes glowing 
   0% 
@@ -168,10 +225,85 @@ progress
   40%  
     box-shadow: 0 0 50px $_red 
   50%
-    border-color: $_sky_blue
-      
+    border-color: $_blue
   60%  
     box-shadow: 0 0 50px $_red 
   100% 
     box-shadow: 0 0 -10px $_red 
     border-color: $button_hover
+
+.glowblue
+  animation: glowblue 2s infinite linear
+@keyframes glowblue 
+  0% 
+    background: inherit
+  50%
+    background: $_blue
+  100% 
+    background: inherit
+    
+.gloworange
+  animation: gloworange 2s infinite linear
+@keyframes gloworange
+  0%, 100%
+    background: inherit
+  10%, 90%
+    color: $_black
+  50%
+    background: $_orange
+    
+.glowyellow
+  animation: glowyellow 2s infinite linear
+@keyframes glowyellow 
+  0%, 100%
+    color: $_yellow
+    background: inherit
+  10%, 90%
+    color: $_black
+  50%
+    background: $_yellow
+    
+.glowgreen
+  animation: glowgreen 2s infinite linear
+@keyframes glowgreen 
+  0%, 100%
+    background: inherit
+  10%, 90%
+    color: $_black
+  50%
+    background: $_green
+    
+.glowred
+  animation: glowred 2s infinite linear
+@keyframes glowred 
+  0%, 100%
+    background: inherit
+    color: $_red
+  10%, 90%
+    color: $_black
+  50%
+    background: $_red
+    
+
+    
+@keyframes scoopable_glow 
+  0% 
+    background: $_green
+    //box-shadow: 0 0 -10px $_red 
+  40%  
+    //box-shadow: 0 0 50px $_red 
+  50%
+    background: $_blue
+  60%  
+    //box-shadow: 0 0 50px $_red 
+  100% 
+    //box-shadow: 0 0 -10px $_red 
+    background: $_green
+    
+@-webkit-keyframes barberpole 
+  0% 
+    background-position: 0
+  100% 
+    background-position: 200%
+.anim_faster
+  animation-duration: 500ms

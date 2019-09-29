@@ -14,7 +14,7 @@ body {
 
 h2, h3 {
   border: 1px solid #1c0f00;
-  background: #c06400;
+  background: #ff7100;
   color: #000000;
   font-weight: bold;
   text-transform: uppercase;
@@ -67,18 +67,22 @@ h2, h3 {
   grid-column-end: 3;
 }
 
+#shipStatus,
 #currentSystem,
 #targetSystem {
   margin-bottom: 1em;
-  border: 1px solid #c06400;
+  border: 1px solid #ff7100;
 }
+#shipStatus .starClass,
 #currentSystem .starClass,
 #targetSystem .starClass {
   text-align: right;
 }
-#currentSystem .starClass.scoopable,
-#targetSystem .starClass.scoopable {
-  background: #3a741e;
+
+.scoopable {
+  background: #00ff00;
+  color: #000000;
+  animation: scoopable_glow 2s infinite linear;
 }
 
 progress {
@@ -87,8 +91,11 @@ progress {
   width: 100%;
   height: 2.5em;
 }
-progress::-webkit-progress-value {
-  animation: glowing 1s infinite;
+progress[value="1"]::-webkit-progress-value, progress[value="1"]::-moz-progress-bar {
+  background: #ff7100;
+}
+progress::-webkit-progress-value, progress::-moz-progress-bar {
+  background: #f1d91e;
 }
 
 .cards {
@@ -97,7 +104,7 @@ progress::-webkit-progress-value {
   justify-content: flex-start;
 }
 .cards .card {
-  border: 1px solid #c06400;
+  border: 1px solid #ff7100;
 }
 .cards .card.faded {
   opacity: 0.5;
@@ -107,22 +114,6 @@ progress::-webkit-progress-value {
 }
 .cards .card_header {
   width: 100%;
-}
-
-.row2 {
-  display: block;
-}
-.row2 div {
-  display: inline-block;
-}
-.row2 div:first-child {
-  width: 50%;
-  float: left;
-}
-.row2 div:last-child {
-  width: 50%;
-  float: left;
-  text-align: right;
 }
 
 .body_icon {
@@ -143,35 +134,198 @@ progress::-webkit-progress-value {
   width: 100%;
 }
 
+.asteroid_cluster {
+  background-color: #FFFFFF;
+}
+
+.metal_rich_body,
+.high_metal_content_body,
+.rocky_body {
+  background-color: #7f7f7f;
+  color: #000000;
+}
+
+.icy_body,
+.rocky_ice_body {
+  background-color: #00ffff;
+  color: #000000;
+}
+
+.earthlike_world, .earthlike_body {
+  background-color: #00ff00;
+  color: #000000;
+}
+
+.amonia_world {
+  background-color: #7f7f7f;
+  color: #000000;
+}
+
+.water_world,
+.water_giant,
+.water_giant_with_life,
+.gas_giant_with_ammonia_based_life,
+.gas_giant_with_water_based_life {
+  background-color: #0000ff;
+}
+
+.sudarsky_class_i_gas_giant,
+.sudarsky_class_ii_gas_giant,
+.sudarsky_class_iii_gas_giant,
+.sudarsky_class_iv_gas_giant,
+.sudarsky_class_v_gas_giant,
+.helium_rich_gas_giant,
+.helium_gas_giant {
+  background-color: #ff7f00;
+  color: #000000;
+}
+
 @keyframes animate-glow {
-  0% {
-    box-shadow: 0 5px 5px rgba(255, 255, 255, 0.7) inset, 0 -5px 5px rgba(255, 255, 255, 0.7) inset;
+  10% {
+    box-shadow: 5px 0px 5px #ff7100ff, 5px 0px 5px #ff7100ff;
+  }
+  20% {
+    box-shadow: 5px 5px 5px #ff7100ff, 5px 5px 5px #ff7100ff;
+  }
+  30% {
+    box-shadow: 0px 5px 5px #ff7100ff, 0px 5px 5px #ff7100ff;
+  }
+  40% {
+    box-shadow: -5px 5px 5px #ff7100ff, -5px 5px 5px #ff7100ff;
   }
   50% {
-    box-shadow: 0 5px 5px rgba(255, 255, 255, 0.3) inset, 0 -5px 5px rgba(255, 255, 255, 0.3) inset;
+    box-shadow: -5px 0px 5px #ff7100ff, -5px 0px 5px #ff7100ff;
+  }
+  60% {
+    box-shadow: -5px -5px 5px #ff7100ff, -5px -5px 5px #ff7100ff;
+  }
+  70% {
+    box-shadow: 0px -5px 5px #ff7100ff, 0px -5px 5px #ff7100ff;
+  }
+  80% {
+    box-shadow: 5px -5px 5px #ff7100ff, 5px -5px 5px #ff7100ff;
   }
   100% {
-    box-shadow: 0 5px 5px rgba(255, 255, 255, 0.7) inset, 0 -5px 5px rgba(255, 255, 255, 0.7) inset;
+    box-shadow: 5px 0px 5px #ff7100ff, 5px 0px 5px #ff7100ff;
   }
 }
 @keyframes glowing {
   0% {
     border-color: #ff7100;
-    box-shadow: 0 0 -10px #b32900;
+    box-shadow: 0 0 -10px #ff0000;
   }
   40% {
-    box-shadow: 0 0 50px #b32900;
+    box-shadow: 0 0 50px #ff0000;
   }
   50% {
     border-color: #1ff6f8;
   }
   60% {
-    box-shadow: 0 0 50px #b32900;
+    box-shadow: 0 0 50px #ff0000;
   }
   100% {
-    box-shadow: 0 0 -10px #b32900;
+    box-shadow: 0 0 -10px #ff0000;
     border-color: #ff7100;
   }
+}
+.glowblue {
+  animation: glowblue 2s infinite linear;
+}
+
+@keyframes glowblue {
+  0% {
+    background: inherit;
+  }
+  50% {
+    background: #1ff6f8;
+  }
+  100% {
+    background: inherit;
+  }
+}
+.gloworange {
+  animation: gloworange 2s infinite linear;
+}
+
+@keyframes gloworange {
+  0%, 100% {
+    background: inherit;
+  }
+  10%, 90% {
+    color: #000000;
+  }
+  50% {
+    background: #ff7100;
+  }
+}
+.glowyellow {
+  animation: glowyellow 2s infinite linear;
+}
+
+@keyframes glowyellow {
+  0%, 100% {
+    color: #f1d91e;
+    background: inherit;
+  }
+  10%, 90% {
+    color: #000000;
+  }
+  50% {
+    background: #f1d91e;
+  }
+}
+.glowgreen {
+  animation: glowgreen 2s infinite linear;
+}
+
+@keyframes glowgreen {
+  0%, 100% {
+    background: inherit;
+  }
+  10%, 90% {
+    color: #000000;
+  }
+  50% {
+    background: #00ff00;
+  }
+}
+.glowred {
+  animation: glowred 2s infinite linear;
+}
+
+@keyframes glowred {
+  0%, 100% {
+    background: inherit;
+    color: #ff0000;
+  }
+  10%, 90% {
+    color: #000000;
+  }
+  50% {
+    background: #ff0000;
+  }
+}
+@keyframes scoopable_glow {
+  0% {
+    background: #00ff00;
+  }
+  50% {
+    background: #1ff6f8;
+  }
+  100% {
+    background: #00ff00;
+  }
+}
+@-webkit-keyframes barberpole {
+  0% {
+    background-position: 0;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+.anim_faster {
+  animation-duration: 500ms;
 }
 
 /*# sourceMappingURL=style.css.map */
