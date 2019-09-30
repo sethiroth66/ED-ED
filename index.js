@@ -218,6 +218,7 @@ let tmpfile_path = "./examples/test_tail.log";
 
 function new_tail_watcher(){
   let file_path = get_latest_file();
+ // file_path = "./examples/demo_log.txt";
   if (file_path && file_path.length){
     console.info(file_path);
     let tail_options = {fromBeginning: true,follow: true,useWatchFile: true,flushAtEOF: true};
