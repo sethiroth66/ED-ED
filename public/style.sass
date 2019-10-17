@@ -61,6 +61,9 @@ h2, h3
   text-transform: uppercase
   padding: 0.2em 0.4em
 
+hr
+  border-color: $_orange
+  
 .elementStyle
   background: $element_background
   color: $element_font
@@ -122,7 +125,24 @@ progress
       //background-size: 100% 100%
       //animation: barberpole 5s infinite linear
 
-    
+.blue
+  background-color: $_blue
+  color: $_black
+.green
+  background-color: $_green
+  color: $_black
+.orange
+  background-color: $_orange
+  color: $_black
+.red
+  background-color: $_red
+  color: $_black
+.yellow
+  background-color: $_yellow
+  color: $_black
+.baby_blue
+  background-color: $_baby_blue
+  color: $_black
 .cards
   align-items: stretch
   align-content: stretch
@@ -138,6 +158,9 @@ progress
   .card_header
     width: 100%
 
+.enter
+  animation: fade-in 1s ease-in
+    
 .body_icon
   height: 2.5em
   width: 2.5em
@@ -169,7 +192,7 @@ progress
 .earthlike_world,.earthlike_body
   background-color: #00ff00
   color: $_black
-.amonia_world
+.ammonia_world
   background-color: #7f7f7f
   color: $_black
 .water_world,
@@ -189,7 +212,12 @@ progress
   color: $_black
   
 
-
+  
+@keyframes fade-in
+  0%
+    opacity: 0
+  100%
+    opacity: 1
   
 @keyframes animate-glow
   0%

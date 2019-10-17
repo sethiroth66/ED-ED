@@ -51,7 +51,9 @@ function process_log(log){
     "planet_atmosphere": "Atmosphere",
     "planet_atmosphere_type": "AtmosphereType",
     "planet_volcanism": "Volcanism",
-    "planet_landable": "Landable"
+    "planet_landable": "Landable",
+    "planet_radius": "Radius",
+    "planet_surface_temperature": "SurfaceTemperature",
   };
   let scoopable_types = ["K","G","B","F","O","A","M",];
   
@@ -62,13 +64,11 @@ function process_log(log){
   }
   
   if (log.event==="Location"){
-
     if (systems[log.StarSystem] === undefined) {
       systems[log.StarSystem] = JSON.parse(JSON.stringify( systems['__blank__']));
       systems[log.StarSystem].system_name = log.StarSystem;
-      system_name = systems[log.StarSystem].system_name;    
     }
-    
+    system_name = systems[log.StarSystem].system_name;
     EDJRData.currentSystem = systems[system_name];
     EDJRData.targetSystem = systems[system_name];
 
@@ -153,6 +153,20 @@ function process_log(log){
     // set planet_class 'class' :P
     body.planet_class_class = body.planet_class.toLowerCase().replace(/[^a-z]/g,"_");
     
+    // guardian site?
+    body.potential_guardian = false;
+    if (!!body.planet_class_class.match(/rock|metal/)){
+      if (body.planet_surface_temperature >= 179 && body.planet_surface_temperature <= 311){
+        if (body.planet_radius >= 999 && body.planet_radius <= 3001){
+          body.potential_guardian = true;
+        }
+      }
+    }
+    if (!!body.body_name.match(/guardian/i)){
+      body.potential_guardian = true;
+    }
+    
+    
     // update progress
     let bodies_length = Object.keys(systems[log.StarSystem].bodies).length
     let full_body_count = systems[log.StarSystem].body_count+systems[log.StarSystem].non_body_count;
@@ -177,16 +191,18 @@ function process_log(log){
   return system_name;
 }
 
+let journals = [];
+let path = os.userInfo().homedir + "/Saved Games/Frontier Developments/Elite Dangerous/";
+
 function get_latest_file() {
-  let path = os.userInfo().homedir + "/Saved Games/Frontier Developments/Elite Dangerous/";
   let files_array = fs.readdirSync(path);
-  let journals = [];
+  let j = [];
   for (let file of files_array) {
     if (file.match(/^journal\.\d+\.\d+\.log/i)) {
-      journals.push(file);
+      j.push(file);
     }
   }
-  journals = journals.reverse();
+  journals = j.reverse();
   return journals[0].length ? path + journals[0] : false;
 }
 
@@ -198,7 +214,6 @@ app.get('/vue.js', (req, res) => res.sendFile(__dirname + '/public/vue.js'));
 http.listen(3000, () => console.info('Serving silver platter to http://127.0.0.1:3000'));
 
 let _socket;
-
 io.on('connection', function(socket){
   _socket = socket;
   console.log('a user connected');
@@ -216,9 +231,14 @@ let Tail = require('tail').Tail;
 // let tmpfile_path = "./examples/Journal.190921175417.01.log";
 let tmpfile_path = "./examples/test_tail.log";
 
+let journal_index = 1;
 function new_tail_watcher(){
-  let file_path = get_latest_file();
+  get_latest_file();
  // file_path = "./examples/demo_log.txt";
+  if (journals[journal_index] === undefined){
+    journal_index -=1 ;
+  }
+  let file_path = path + journals[journal_index];
   if (file_path && file_path.length){
     console.info(file_path);
     let tail_options = {fromBeginning: true,follow: true,useWatchFile: true,flushAtEOF: true};
@@ -236,7 +256,7 @@ function new_tail_watcher(){
             reject()
             return;
           }
-          console.log(event);
+          // console.log(event);
           let name = process_log(json_data);
           if (event==="Continue" ){
             console.log("switching file?!")
@@ -248,7 +268,13 @@ function new_tail_watcher(){
           }
           if (event==="Shutdown"){
             tail.unwatch();
-            reject();
+            if(journal_index>=1){
+              journal_index -= 1;
+              new_tail_watcher();
+              reject()
+            }else{
+              reject("folder_watch");
+            }
           }
           if (name.length > 0) {
             // console.log(json_data);
@@ -258,9 +284,19 @@ function new_tail_watcher(){
           }
         }
       }).then(function(data){
-        _socket.emit("message", {"action": "update", "EDJRData": EDJRData})
+        if(journal_index===0){
+          _socket.emit("message", {"action": "update", "EDJRData": EDJRData})
+        }
       }).catch(function(data){
-          
+          if(data==="folder_watch"){
+            console.log("starting folder watch?");
+            fs.watch(path, (eventType, filename) => {
+              if (eventType==="rename"){
+                console.log("detected 'rename'?");
+                new_tail_watcher()
+              }
+            })
+          }
       })
       
     });

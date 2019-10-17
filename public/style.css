@@ -21,6 +21,10 @@ h2, h3 {
   padding: 0.2em 0.4em;
 }
 
+hr {
+  border-color: #ff7100;
+}
+
 .elementStyle {
   background: #381d00;
   color: #cccccc;
@@ -98,6 +102,36 @@ progress::-webkit-progress-value, progress::-moz-progress-bar {
   background: #f1d91e;
 }
 
+.blue {
+  background-color: #1ff6f8;
+  color: #000000;
+}
+
+.green {
+  background-color: #00ff00;
+  color: #000000;
+}
+
+.orange {
+  background-color: #ff7100;
+  color: #000000;
+}
+
+.red {
+  background-color: #ff0000;
+  color: #000000;
+}
+
+.yellow {
+  background-color: #f1d91e;
+  color: #000000;
+}
+
+.baby_blue {
+  background-color: #3ac0ea;
+  color: #000000;
+}
+
 .cards {
   align-items: stretch;
   align-content: stretch;
@@ -114,6 +148,10 @@ progress::-webkit-progress-value, progress::-moz-progress-bar {
 }
 .cards .card_header {
   width: 100%;
+}
+
+.enter {
+  animation: fade-in 1s ease-in;
 }
 
 .body_icon {
@@ -156,7 +194,7 @@ progress::-webkit-progress-value, progress::-moz-progress-bar {
   color: #000000;
 }
 
-.amonia_world {
+.ammonia_world {
   background-color: #7f7f7f;
   color: #000000;
 }
@@ -180,6 +218,14 @@ progress::-webkit-progress-value, progress::-moz-progress-bar {
   color: #000000;
 }
 
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 @keyframes animate-glow {
   10% {
     box-shadow: 5px 0px 5px #ff7100ff, 5px 0px 5px #ff7100ff;
