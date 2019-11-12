@@ -150,6 +150,16 @@ progress::-webkit-progress-value, progress::-moz-progress-bar {
   width: 100%;
 }
 
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .enter {
   animation: fade-in 1s ease-in;
 }

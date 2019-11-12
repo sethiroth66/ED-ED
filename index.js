@@ -20,7 +20,8 @@ let EDJRData = {
     max_fuel: 0, 
     fuel_level: 0,
     fuel_warn: false,
-    fuel_critical: false
+    fuel_critical: false,
+    jumps_remaining: 0
   },
   currentSystem : systems['__blank__'],
   targetSystem : systems['__blank__'],
@@ -84,6 +85,9 @@ function process_log(log){
     // forward thinking for if name gets changed to StarSystem. This is in documentation, but not used in logs...
     if (log.StarSystem && log.StarSystem.length){
       name = log.StarSystem
+    }
+    if (log.RemainingJumpsInRoute!==undefined){
+      EDJRData.ship_status.jumps_remaining = log.RemainingJumpsInRoute
     }
     // For some reason this event uses "Name" instead of "StarSystem".
     if (systems[name] === undefined) {

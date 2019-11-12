@@ -12,8 +12,9 @@
 </head>
 <body id="EDJR">
 
-<div v-if="ship_status.fuel_warn" id="shipStatus" class="grid">
-    <h2 class="grid_1_3 glowred" v-bind:class="{'anim_faster': ship_status.fuel_critical}">
+<div id="shipStatus" class="grid">
+    <h2 class="grid_1_3" style="text-align: right;">{{ship_status.jumps_remaining}} Jumps Remaining</h2>
+    <h2 class="grid_1_3 glowred"  v-if="ship_status.fuel_warn" v-bind:class="{'anim_faster': ship_status.fuel_critical}">
         <span v-if="ship_status.fuel_warn && !ship_status.fuel_critical">FUEL LOW</span>
         <span v-else-if="ship_status.fuel_warn && ship_status.fuel_critical">FUEL CRITICAL</span>
     </h2>
@@ -33,12 +34,12 @@
         <progress class="grid_1_3" id="systemScanProgress" max="1" :value="system.scan_progress"></progress>
     </div>
 
-    <div v-if="system.bodies" id="bodies" class="cards grid">
+    <div v-if="system.bodies">
         
+        <transition-group name="fade" tag="div" id="bodies" class="cards grid">
         <div class="card grid elementStyle" v-for="(body, body_id) of system.bodies" 
              v-bind:class="{ 'faded':body.was_mapped,
-             'important':body.important||(body.planet_terraform&&!body.was_mapped), 
-             'glowgreen': !body.was_discovered&&!body.was_mapped }"
+             'important':body.important||(body.planet_terraform&&!body.was_mapped)}"
             v-if="body.belt_cluster===false"
              v-bind:key="body_id"
         >
@@ -50,9 +51,9 @@
                     <div>Discovered</div>
                     <div v-bind:class="{'gloworange': !body.was_discovered }">{{ body.was_discovered }}</div>
                 </div>
-                <div class="grid grid_1_3">
+                <div class="grid grid_1_3" >
                     <div>Mapped</div>
-                    <div>{{ body.was_mapped }}</div>
+                    <div v-bind:class="{'glowgreen': !body.was_discovered&&!body.was_mapped }">{{ body.was_mapped }}</div>
                 </div>
                 <div class="grid grid_1_3">
                     <div>Distance</div>
@@ -99,9 +100,9 @@
                 </div>
             </div>
         </div>
+        </transition-group>
         
     </div>
-
 </div>
 
 </body>
