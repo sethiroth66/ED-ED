@@ -2,11 +2,12 @@
   "name": "elite_node_js",
   "version": "1.0.0",
   "dependencies": {
-    "event-stream": "^4.0.1",
-    "express": "^4.17.1",
-    "socket.io": "^2.3.0",
-    "tail": "^2.0.3",
-    "vue": "^2.6.10"
+    "event-stream": "4.0.1",
+    "express": "4.17.1",
+    "socket.io": "2.3.0",
+    "open": "7.0.3",
+    "tail": "2.0.3",
+    "vue": "2.6.10"
   },
   "devDependencies": {
     "sass": "^1.22",
