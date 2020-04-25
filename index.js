@@ -266,7 +266,7 @@ io.on('connection', function (socket) {
 function new_tail_watcher () {
   let file_path = ''
   if (demo_mode) {
-    file_path = './examples/demo_log.txt'
+    file_path = './examples/demo_log.log'
   }
   else {
     get_latest_file()
