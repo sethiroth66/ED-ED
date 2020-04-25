@@ -1,9 +1,12 @@
 
-$_blue: #1ff6f8
-$_green: #00ff00
-$_orange: #ff7100
 $_red: #ff0000
+$_orange: #ff7100
 $_yellow: #f1d91e
+$_green: #00ff00
+$_blue: #1ff6f8
+$_indigo: #4D59D3
+$_purple: #BB2BFE
+
 $_baby_blue: #3ac0ea
 $_black: #000000
 $_white: #FFFFFF
@@ -321,6 +324,26 @@ progress
     color: $_black
   50%
     background: $_red
+
+.glowrainbow
+  animation: glowrainbow 1s infinite linear
+@keyframes glowrainbow
+  0%, 100%
+    background: $_red
+    color: $_black
+  14.28%
+    background: $_orange
+  28.57%
+    background: $_yellow
+  42.85%
+    background: $_green
+  57.14%
+    background: $_blue
+  71.42%
+    background: $_indigo
+  85.71%
+    background: $_purple
+
     
 
     

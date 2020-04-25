@@ -39,13 +39,15 @@
         <transition-group name="fade" tag="div" id="bodies" class="cards grid">
         <div class="card grid elementStyle" v-for="(body, body_id) of system.bodies" 
              v-bind:class="{ 'faded':body.was_mapped,
-             'important':body.important||(body.planet_terraform&&!body.was_mapped)}"
+             'important':body.important||(body.planet_terraform&&!body.was_mapped)
+        }"
             v-if="body.belt_cluster===false"
              v-bind:key="body_id"
         >
             <div class="grid grid_1_3">
                 <div class="grid_1_3">
-                    <h3 v-bind:class="{'gloworange': !body.was_discovered && !body.was_mapped }" class="body_name">{{body_id}}. {{body.body_name}}</h3>
+                    <h3 v-bind:class="{'gloworange': !body.was_discovered && !body.was_mapped,
+             'glowrainbow':body.never_seen }" class="body_name">{{body_id}}. {{body.body_name}}</h3>
                 </div>
                 <div class="grid grid_1_3">
                     <div>Discovered</div>
@@ -97,6 +99,13 @@
                 <div v-if="body.planet_class" class="grid grid_1_3">
                     <div>Class?</div>
                     <div v-bind:class="body.planet_class_class">{{ body.planet_class }}</div>
+                </div>
+
+
+                <div v-if="body.demo_note" class="grid grid_1_3">
+                    <hr class="grid_1_3">
+                    <div>Note:</div>
+                    <div>{{ body.demo_note }}</div>
                 </div>
             </div>
         </div>

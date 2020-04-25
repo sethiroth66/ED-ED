@@ -69,8 +69,12 @@ function process_log (log) {
     'planet_landable': 'Landable',
     'planet_radius': 'Radius',
     'planet_surface_temperature': 'SurfaceTemperature',
+    'never_seen': false,
+    // Demo note
+    'demo_note': 'Demo Note..',
   }
   let scoopable_types = ['K', 'G', 'B', 'F', 'O', 'A', 'M',]
+  let never_seen = ['X','Exotic','RoguePlanet','StellarRemnantNebula',]
 
   if (log.FuelLevel !== undefined) {
     EDJRData.ship_status.fuel_level = log.FuelLevel
@@ -138,7 +142,7 @@ function process_log (log) {
     // EDJRData.targetSystem=systems['__blank__'];
     EDJRData.currentSystem = systems[system_name]
   }
-  else if (log.event === 'Scan') {
+  else if (log.event === 'Scan') { // primary planetary scan event
     if (systems[log.StarSystem] === undefined) {
       systems[log.StarSystem] = JSON.parse(JSON.stringify(systems['__blank__']))
       systems[log.StarSystem].system_name = log.StarSystem
@@ -153,6 +157,7 @@ function process_log (log) {
     if (systems[log.StarSystem].bodies[bodyId] === undefined) {
       systems[log.StarSystem].bodies[bodyId] = {important: false}
     }
+
     // copy properties from the scan
     let body = systems[log.StarSystem].bodies[bodyId]
     for (let K in body_template) {
@@ -161,9 +166,16 @@ function process_log (log) {
         body[K] = body[K] || log[V]
       }
     }
+
+    // Not actual attribute, just used for notes when using demo mode.
+    if (log.demo_note!==undefined){
+      body.demo_note = log.demo_note;
+    }
+
     // determine if the star type is scoopable
     if (body.star_type) {
       body.scoopable = scoopable_types.includes(body.star_type)
+      body.never_seen = never_seen.includes(body.star_type);
     }
 
     // remove belt clusters

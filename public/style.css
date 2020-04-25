@@ -364,6 +364,34 @@ progress::-webkit-progress-value, progress::-moz-progress-bar {
     background: #ff0000;
   }
 }
+.glowrainbow {
+  animation: glowrainbow 1s infinite linear;
+}
+
+@keyframes glowrainbow {
+  0%, 100% {
+    background: #ff0000;
+    color: #000000;
+  }
+  14.28% {
+    background: #ff7100;
+  }
+  28.57% {
+    background: #f1d91e;
+  }
+  42.85% {
+    background: #00ff00;
+  }
+  57.14% {
+    background: #1ff6f8;
+  }
+  71.42% {
+    background: #4D59D3;
+  }
+  85.71% {
+    background: #BB2BFE;
+  }
+}
 @keyframes scoopable_glow {
   0% {
     background: #00ff00;
