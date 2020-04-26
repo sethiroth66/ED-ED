@@ -13,24 +13,24 @@
 <body id="EDJR">
 
 <div id="shipStatus" class="grid">
-    <h2 class="grid_1_3" style="text-align: right;">{{ship_status.jumps_remaining}} Jumps Remaining</h2>
-    <h2 class="grid_1_3 glowred"  v-if="ship_status.fuel_warn" v-bind:class="{'anim_faster': ship_status.fuel_critical}">
+    <h3 class="grid_1_3" style="text-align: right;">{{ship_status.jumps_remaining}} Jumps Remaining</h3>
+    <h3 class="grid_1_3 glowred"  v-if="ship_status.fuel_warn" v-bind:class="{'anim_faster': ship_status.fuel_critical}">
         <span v-if="ship_status.fuel_warn && !ship_status.fuel_critical">FUEL LOW</span>
         <span v-else-if="ship_status.fuel_warn && ship_status.fuel_critical">FUEL CRITICAL</span>
-    </h2>
+    </h3>
 </div>
 <div v-if="system.system_name && system.system_name.length && system.system_name !== '...'" id="targetSystem" class="grid">
-    <h2 class="grid_1_3">Target System:</h2>
-    <h3 class="systemName">{{system.system_name}}</h3>
-    <h3 v-bind:class="{'scoopable': system.scoopable,'glowred': !system.scoopable}" class="starClass">{{system.star_class}}</h3>
+    <h3 class="grid_1_3">Target System:</h3>
+    <h4 class="systemName">{{system.system_name}}</h4>
+    <h4 v-bind:class="{'scoopable': system.scoopable,'glowred': !system.scoopable}" class="starClass">{{system.star_class}}</h4>
 </div>
 
 <div id="currentSystem" class="">
     
     <div class="grid">
-        <h2 class="grid_1_3">Current System:</h2>
-        <h3 class="systemName">{{system.system_name}}</h3>
-        <h3 class="starClass" v-bind:class="{'scoopable': system.scoopable,'glowred': !system.scoopable}">{{system.star_class}}</h3>
+        <h3 class="grid_1_3">Current System:</h3>
+        <h4 class="systemName">{{system.system_name}}</h4>
+        <h4 class="starClass" v-bind:class="{'scoopable': system.scoopable,'glowred': !system.scoopable}">{{system.star_class}}</h4>
         <progress class="grid_1_3" id="systemScanProgress" max="1" :value="system.scan_progress"></progress>
     </div>
 
@@ -46,8 +46,8 @@
         >
             <div class="grid grid_1_3">
                 <div class="grid_1_3">
-                    <h3 v-bind:class="{'gloworange': !body.was_discovered && !body.was_mapped,
-             'glowrainbow':body.never_seen }" class="body_name">{{body_id}}. {{body.body_name}}</h3>
+                    <h4 v-bind:class="{'gloworange': !body.was_discovered && !body.was_mapped,
+             'glowrainbow':body.never_seen }" class="body_name">{{body_id}}. {{body.body_name}}</h4>
                 </div>
                 <div class="grid grid_1_3">
                     <div>Discovered</div>
