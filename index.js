@@ -50,6 +50,7 @@ let _socket // the server socket connection
 function process_log (log) {
   let system_name = ''
   let body_template = {
+    // 'template_attr': 'LogAttribute'
     'star_system': 'StarSystem', // important one?
     'body_name': 'BodyName',
     'star_class': 'StarClass',
@@ -60,6 +61,9 @@ function process_log (log) {
     'star_type': 'StarType',
     'star_subclass': 'Subclass',
     'star_age': 'Age_MY',
+    'star_mass': 'StellarMass',
+    'star_radius': 'Radius',
+    'star_temp_surface': 'SurfaceTemperature',
     // Planet/Moon Stuff
     'planet_class': 'PlanetClass',
     'planet_terraform': 'TerraformState',
@@ -68,10 +72,11 @@ function process_log (log) {
     'planet_volcanism': 'Volcanism',
     'planet_landable': 'Landable',
     'planet_radius': 'Radius',
+    'planet_mass': 'MassEM',
     'planet_surface_temperature': 'SurfaceTemperature',
     'never_seen': false,
     // Demo note
-    'demo_note': 'Demo Note..',
+    'demo_note': 'demo_note',
   }
   let scoopable_types = ['K', 'G', 'B', 'F', 'O', 'A', 'M',]
   let never_seen = ['X','Exotic','RoguePlanet','StellarRemnantNebula',]
@@ -187,8 +192,8 @@ function process_log (log) {
     // guardian site?
     body.potential_guardian = false
     if (!!body.planet_class_class.match(/rock|metal/)) {
-      if (body.planet_surface_temperature >= 179 && body.planet_surface_temperature <= 311) {
-        if (body.planet_radius >= 999 && body.planet_radius <= 3001) {
+      if (body.planet_surface_temperature > 180 && body.planet_surface_temperature < 310) {
+        if (body.planet_radius >= 999000 && body.planet_radius <= 3001000) {
           body.potential_guardian = true
         }
       }
