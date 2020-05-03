@@ -37,11 +37,12 @@
     <div v-if="system.bodies">
         
         <transition-group name="fade" tag="div" id="bodies" class="cards grid">
-        <div class="card grid elementStyle" v-for="(body, body_id) of system.bodies" 
+        <div class="card grid elementStyle"
+            v-if="body.belt_cluster===false && !(body.planet_class_class=='icy_body'&&((body.planet_landable===false&&body.planet_terraform!==false)||body.potential_credits<4000)) "
+             v-for="(body, body_id) of system.bodies"
              v-bind:class="{ 'faded':body.was_mapped,
              'important':body.important||(body.planet_terraform&&!body.was_mapped)
         }"
-            v-if="body.belt_cluster===false"
              v-bind:key="body_id"
         >
             <div class="grid grid_1_3">
@@ -55,21 +56,24 @@
                 </div>
                 <div class="grid grid_1_3" >
                     <div>Mapped</div>
-                    <div v-bind:class="{'glowgreen': !body.was_discovered&&!body.was_mapped }">{{ body.was_mapped }}</div>
+                    <div v-bind:class="{'glowgreen': !body.was_discovered&&!body._was_mapped }">{{ body.was_mapped }}</div>
                 </div>
                 <div class="grid grid_1_3">
                     <div>Distance</div>
-                    <div>{{ Number(body.distance_from_arival).toFixed(2) }}</div>
+                    <div>{{ Number(body.distance_from_arival).toLocaleString(undefined,{maximumFractionDigits:2}) }}</div>
+                </div>
+                <div v-if="body.estimated_credits" class="grid grid_1_3">
+                    <div>Estimated Credits</div>
+                    <div v-bind:class="{'glowred': body.potential_credits>1000000 }">
+                        {{ Number(body.estimated_credits).toLocaleString() }}
+                        <span v-if="body.potential_credits && body.potential_credits!=body.estimated_credits"> / {{Number(body.potential_credits).toLocaleString()}}</span>
+                    </div>
                 </div>
                 <hr class="grid_1_3">
                 
                 <div v-if="body.star_type" class="grid grid_1_3">
                     <div>Star Type?</div>
                     <div v-bind:class="{'scoopable': body.scoopable,'glowred': !body.scoopable}">{{ body.star_type }}</div>
-                </div>
-                <div v-if="body.star_type && body.distance_from_arival" class="grid grid_1_3">
-                    <div>Distance?</div>
-                    <div v-bind:class="{'scoopable': body.scoopable}">{{ body.distance_from_arival }}</div>
                 </div>
                 <div v-if="body.star_class" class="grid grid_1_3">
                     <div>Star Class?</div>

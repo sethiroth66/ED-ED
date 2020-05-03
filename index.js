@@ -57,6 +57,7 @@ function process_log (log) {
     'distance_from_arival': 'DistanceFromArrivalLS',
     'was_discovered': 'WasDiscovered',
     'was_mapped': 'WasMapped',
+    '_was_mapped': 'WasMapped',
     // Start Stuff
     'star_type': 'StarType',
     'star_subclass': 'Subclass',
@@ -209,6 +210,13 @@ function process_log (log) {
 
     system_name = systems[log.StarSystem].system_name
     EDJRData.currentSystem = systems[system_name]
+
+    let credits = estimate_planet_credits(system_name,bodyId);
+    if(credits>0){
+      body.estimated_credits = credits;
+      body.potential_credits = estimate_planet_credits(system_name,bodyId,true);
+    }
+
   }
   else if (log.event === 'FSSDiscoveryScan') {
     systems[log.SystemName].scan_progress = log.Progress || systems[log.SystemName].scan_progress || 0
@@ -219,10 +227,132 @@ function process_log (log) {
     systems[log.SystemName].scan_progress = 1
   }
   else if (log.event === 'SAAScanComplete') {
-    EDJRData.currentSystem.bodies[log.BodyID].was_mapped = 'scanned'
+    let bodyId = log.BodyID.toFixed(0)
+    system_name = EDJRData.currentSystem.system_name
+
+    EDJRData.currentSystem.bodies[bodyId].was_mapped = 'scanned'
+    EDJRData.currentSystem.bodies[bodyId].efficiency_target = log.EfficiencyTarget
+    EDJRData.currentSystem.bodies[bodyId].probes_used = log.ProbesUsed
+    EDJRData.currentSystem.bodies[bodyId].met_efficiency = (log.ProbesUsed<=log.EfficiencyTarget)
+
+    let credits = estimate_planet_credits(system_name,bodyId);
+    if(credits>0){
+      EDJRData.currentSystem.bodies[bodyId].estimated_credits = credits;
+      EDJRData.currentSystem.bodies[bodyId].potential_credits = estimate_planet_credits(system_name,bodyId,true);
+    }
   }
 
+
   return system_name
+}
+
+//q seems to be a constant. It, too, probably needs tweaking - and I can't help but feel I'm missing it's significance - but it's approximately: 0.56591828
+const q = 0.56591828;
+const kstars = {
+  "Star":1200,
+  "NS/BH":22628,
+  "WD":14057
+}
+const kbodies = {
+  'Metal rich body': 21790,
+  'Ammonia world': 96932,
+  'Sudarsky class I gas giant': 1656,
+  'Sudarsky class II gas giant': 9654,
+  'High metal content body': 9654,
+  'Water world': 64831,
+  'Earthlike body': 64831,
+  'other': 300,
+}
+const kbodiesTerraformable = {
+  'Metal rich body': kbodies['Metal rich body'],
+  'Ammonia world': kbodies['Ammonia world'],
+  'Sudarsky class I gas giant': kbodies['Sudarsky class I gas giant'],
+  'Sudarsky class II gas giant': 100677,
+  'High metal content body': 100677,
+  'Water world': 116295,
+  'Earthlike body': 116295,
+  'other': 93328,
+}
+/** @todo figure out how to calculate star and total system credit. */
+function estimate_star_credits (system_name, body_id, get_max_potential = false) {
+
+  let body = systems[system_name].bodies[body_id]
+
+  let k = kstar.Star
+  let mass = Number(body.star_mass)
+
+  // Since 3.3, payouts have been tweaked. For stars, broadly speaking, the basic calculation remains:
+
+  let value = (k + (mass * k / 66.25))
+
+  // Where k is:
+  // Star   k
+  // Star	  1200
+  // NS/BH  22628
+  // WD	    14057
+
+  // The main star also gets a bonus for honking based of the value of all the other bodies in the system. For planetary bodies, it seems to be (applied per-body):
+  // Code:
+  let  honk_bonus_value = Math.max(500,(k + k * q * Math.pow(mass,0.2)) / 3 );
+  honk_bonus_value *= (body.was_discovered) ? 1 : 2.6;
+  // For stellar bodies, it's a straight 1/3rd base value (with 2.6 multiplier if an undiscovered system, same as planetary bodies).
+
+}
+function estimate_planet_credits (system_name, body_id, get_max_potential = false) {
+
+  let body = systems[system_name].bodies[body_id]
+
+  if (!(body.planet_class !== undefined && body.planet_class !== null && body.planet_class.length)) {
+    return
+  }
+
+  let planet_k = kbodies.other
+  if (body.planet_terraform !== '') {
+    if (kbodiesTerraformable[body.planet_class] !== undefined) {
+      planet_k = kbodiesTerraformable[body.planet_class]
+    }
+    else {
+      planet_k = kbodiesTerraformable.other
+    }
+  }
+  else {
+    if (kbodies[body.planet_class] !== undefined) {
+      planet_k = kbodies[body.planet_class]
+    }
+  }
+
+
+
+  let isFirstDicoverer = !body.was_discovered
+  let isMapped = !body._was_mapped
+  let isFirstMapped = !isMapped && (body.probes_used !== undefined && body.probes_used > 0)
+  let met_scan_efficiency = body.met_efficiency;
+
+  if (get_max_potential===true){
+    if (isMapped){
+      met_scan_efficiency=true;
+    }
+  }
+
+  let mappingMultiplier = 1
+  if (isMapped) {
+    if (isFirstDicoverer && isFirstMapped) {
+      mappingMultiplier = 3.699622554
+    }
+    else if (isFirstMapped) {
+      mappingMultiplier = 8.0956
+    }
+    else {
+      mappingMultiplier = 3.3333333333
+    }
+    mappingMultiplier *= (met_scan_efficiency) ? 1.25 : 1
+  }
+  let pbs = planet_k + (planet_k * Math.pow(body.planet_mass, 0.2) * q)
+  let value = Math.max(500, (pbs) * mappingMultiplier)
+  value *= (isFirstDicoverer) ? 2.6 : 1
+  value = Math.round(value)
+  return value
+
 }
 
 function check_folder_exists () {
