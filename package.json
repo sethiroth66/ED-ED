@@ -1,6 +1,10 @@
 {
   "name": "elite_node_js",
   "version": "1.0.0",
+  "scripts": {
+    "inst": "npm install",
+    "start": "node index.js"
+  },
   "dependencies": {
     "event-stream": "4.0.1",
     "express": "4.17.1",
