@@ -13,14 +13,18 @@
 <body id="EDJR">
 
 <div id="shipStatus" class="grid">
-    <h3 class="grid_1_3" style="text-align: right;">{{ship_status.jumps_remaining}} Jumps Remaining</h3>
-    <h3 class="grid_1_3 glowred"  v-if="ship_status.fuel_warn" v-bind:class="{'anim_faster': ship_status.fuel_critical}">
+    <h3 class="grid grid_1_2">
+        <span class="">{{Number(ship_status.current_distance_jumped).toLocaleString(undefined,{maximumFractionDigits:2})}} Ly Jumped ( avg {{Number(ship_status.avg_ly_per_hour).toLocaleString(undefined,{maximumFractionDigits:3})}} LY/h)</span>
+        <span class="" style="text-align:right;">{{ship_status.jumps_remaining}} Jumps Remaining</span>
+    </h3>
+    <h3 class="grid_1_2 glowred" v-if="ship_status.fuel_warn" v-bind:class="{'anim_faster': ship_status.fuel_critical}">
         <span v-if="ship_status.fuel_warn && !ship_status.fuel_critical">FUEL LOW</span>
         <span v-else-if="ship_status.fuel_warn && ship_status.fuel_critical">FUEL CRITICAL</span>
     </h3>
 </div>
+
 <div v-if="system.system_name && system.system_name.length && system.system_name !== '...'" id="targetSystem" class="grid">
-    <h3 class="grid_1_3">Target System:</h3>
+    <h3 class="grid_1_2">Target System:</h3>
     <h4 class="systemName">{{system.system_name}}</h4>
     <h4 v-bind:class="{'scoopable': system.scoopable,'glowred': !system.scoopable}" class="starClass">{{system.star_class}}</h4>
 </div>
@@ -28,10 +32,10 @@
 <div id="currentSystem" class="">
     
     <div class="grid">
-        <h3 class="grid_1_3">Current System:</h3>
+        <h3 class="grid_1_2">Current System:</h3>
         <h4 class="systemName">{{system.system_name}}</h4>
         <h4 class="starClass" v-bind:class="{'scoopable': system.scoopable,'glowred': !system.scoopable}">{{system.star_class}}</h4>
-        <progress class="grid_1_3" id="systemScanProgress" max="1" :value="system.scan_progress"></progress>
+        <progress class="grid_1_2" id="systemScanProgress" max="1" :value="system.scan_progress"></progress>
     </div>
 
     <div v-if="system.bodies">
@@ -45,69 +49,69 @@
         }"
              v-bind:key="body_id"
         >
-            <div class="grid grid_1_3">
-                <div class="grid_1_3">
+            <div class="grid grid_1_2">
+                <div class="grid_1_2">
                     <h4 v-bind:class="{'gloworange': !body.was_discovered && !body.was_mapped,
              'glowrainbow':body.never_seen }" class="body_name">{{body_id}}. {{body.body_name}}</h4>
                 </div>
-                <div class="grid grid_1_3">
+                <div class="grid grid_1_2">
                     <div>Discovered</div>
                     <div v-bind:class="{'gloworange': !body.was_discovered }">{{ body.was_discovered }}</div>
                 </div>
-                <div class="grid grid_1_3" >
+                <div class="grid grid_1_2" >
                     <div>Mapped</div>
                     <div v-bind:class="{'glowgreen': !body.was_discovered&&!body._was_mapped }">{{ body.was_mapped }}</div>
                 </div>
-                <div class="grid grid_1_3">
+                <div class="grid grid_1_2">
                     <div>Distance</div>
                     <div>{{ Number(body.distance_from_arival).toLocaleString(undefined,{maximumFractionDigits:2}) }}</div>
                 </div>
-                <div v-if="body.estimated_credits" class="grid grid_1_3">
+                <div v-if="body.estimated_credits" class="grid grid_1_2">
                     <div>Estimated Credits</div>
                     <div v-bind:class="{'glowred': body.potential_credits>1000000 }">
                         {{ Number(body.estimated_credits).toLocaleString() }}
                         <span v-if="body.potential_credits && body.potential_credits!=body.estimated_credits"> / {{Number(body.potential_credits).toLocaleString()}}</span>
                     </div>
                 </div>
-                <hr class="grid_1_3">
+                <hr class="grid_1_2">
                 
-                <div v-if="body.star_type" class="grid grid_1_3">
+                <div v-if="body.star_type" class="grid grid_1_2">
                     <div>Star Type?</div>
                     <div v-bind:class="{'scoopable': body.scoopable,'glowred': !body.scoopable}">{{ body.star_type }}</div>
                 </div>
-                <div v-if="body.star_class" class="grid grid_1_3">
+                <div v-if="body.star_class" class="grid grid_1_2">
                     <div>Star Class?</div>
                     <div>{{ body.star_class }}</div>
                 </div>
-                <div v-if="body.star_subclass" class="grid grid_1_3">
+                <div v-if="body.star_subclass" class="grid grid_1_2">
                     <div>Star Subclass?</div>
                     <div>{{ body.star_subclass }}</div>
                 </div>
                 
-                <div v-if="body.potential_guardian" class="grid grid_1_3">
+                <div v-if="body.potential_guardian" class="grid grid_1_2">
                     <div>potential_guardian?</div>
                     <div v-bind:class="{'red': body.potential_guardian}">{{ body.potential_guardian }}</div>
                 </div>
-                <div v-if="body.planet_terraform" class="grid grid_1_3">
+                <div v-if="body.planet_terraform" class="grid grid_1_2">
                     <div>Terraformable?</div>
                     <div v-bind:class="{'glowred': body.planet_terraform}">{{ body.planet_terraform }}</div>
                 </div>
-                <div v-if="body.planet_landable" class="grid grid_1_3" >
+                <div v-if="body.planet_landable" class="grid grid_1_2" >
                     <div>Landable?</div>
                     <div v-bind:class="{'yellow': body.planet_landable}">{{ body.planet_landable }}</div>
                 </div>
-                <div v-if="body.planet_atmosphere" class="grid grid_1_3">
+                <div v-if="body.planet_atmosphere" class="grid grid_1_2">
                     <div>Atmosphere?</div>
                     <div>{{ body.planet_atmosphere }}</div>
                 </div>
-                <div v-if="body.planet_class" class="grid grid_1_3">
+                <div v-if="body.planet_class" class="grid grid_1_2">
                     <div>Class?</div>
                     <div v-bind:class="body.planet_class_class">{{ body.planet_class }}</div>
                 </div>
 
 
-                <div v-if="body.demo_note" class="grid grid_1_3">
-                    <hr class="grid_1_3">
+                <div v-if="body.demo_note" class="grid grid_1_2">
+                    <hr class="grid_1_2">
                     <div>Note:</div>
                     <div>{{ body.demo_note }}</div>
                 </div>

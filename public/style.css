@@ -64,7 +64,7 @@ hr {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-.grid .grid_1_3 {
+.grid .grid_1_2 {
   grid-row-start: auto;
   grid-row-end: auto;
   grid-column-start: 1;

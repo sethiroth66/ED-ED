@@ -24,7 +24,10 @@ let EDJRData = {
     fuel_level: 0,
     fuel_warn: false,
     fuel_critical: false,
-    jumps_remaining: 0
+    jumps_remaining: 0,
+    current_distance_jumped: 0,
+    game_start: null,
+    avg_ly_per_hour: null
   },
   currentSystem: systems['__blank__'],
   targetSystem: systems['__blank__'],
@@ -88,7 +91,13 @@ function process_log (log) {
     EDJRData.ship_status.fuel_critical = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel / 4))
   }
 
-  if (log.event === 'Location') {
+  if (log.event === 'LoadGame') {
+    // new game, reset some stuff for current session?
+    EDJRData.ship_status.current_distance_jumped = 0
+    EDJRData.ship_status.game_start = (new Date(log.timestamp)).getTime()/1000;
+
+  }
+  else if (log.event === 'Location') {
     if (systems[log.StarSystem] === undefined) {
       systems[log.StarSystem] = JSON.parse(JSON.stringify(systems['__blank__']))
       systems[log.StarSystem].system_name = log.StarSystem
@@ -142,6 +151,16 @@ function process_log (log) {
     }
   }
   else if (log.event === 'FSDJump') {
+
+    EDJRData.ship_status.current_distance_jumped += Number(log.JumpDist)
+
+    let curtime = (new Date()).getTime()/1000;
+    let time_seconds = (curtime - EDJRData.ship_status.game_start)
+    let time_hours = time_seconds / 60 / 60
+    let speed = EDJRData.ship_status.current_distance_jumped / time_hours
+    // let speed_hours = (speed / 60) / 60;
+    EDJRData.ship_status.avg_ly_per_hour = speed
+
     //main body
     systems[log.StarSystem].main_body = log.BodyID.toFixed(0)
     system_name = systems[log.StarSystem].system_name
