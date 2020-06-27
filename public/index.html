@@ -33,7 +33,7 @@
     
     <div class="grid">
         <h3 class="grid_1_2">Current System:</h3>
-        <h4 class="systemName">{{system.system_name}}</h4>
+        <h4 class="systemName">{{system.system_name}} <span v-if="system.system_allegiance==='Guardian'" class="glowblue anim_faster" style="padding: 0.217em 1em;"> ( {{system.system_allegiance}} Allegiance! )</span></h4>
         <h4 class="starClass" v-bind:class="{'scoopable': system.scoopable,'glowred': !system.scoopable}">{{system.star_class}}</h4>
         <progress class="grid_1_2" id="systemScanProgress" max="1" :value="system.scan_progress"></progress>
     </div>

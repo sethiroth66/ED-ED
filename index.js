@@ -12,6 +12,7 @@ let systems = {
     scan_progress: 0.00,
     body_count: 0,
     non_body_count: 0,
+    system_allegiance: '',
     main_body: 1,
     bodies: {}
   }
@@ -162,6 +163,8 @@ function process_log (log) {
     EDJRData.ship_status.avg_ly_per_hour = speed
 
     //main body
+    systems[log.StarSystem].system_allegiance = log.SystemAllegiance;
+
     systems[log.StarSystem].main_body = log.BodyID.toFixed(0)
     system_name = systems[log.StarSystem].system_name
     // EDJRData.targetSystem=systems['__blank__'];
