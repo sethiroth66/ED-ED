@@ -1,5 +1,5 @@
 // custom settings
-const demo_mode = true
+const demo_mode = false
 const auto_open_browser = false
 
 // system index to be stored in memory
