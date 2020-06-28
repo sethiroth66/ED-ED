@@ -147,8 +147,8 @@ function process_log (log) {
   else if (log.event === 'FuelScoop') {
     EDJRData.ship_status.fuel_level = log.Total
     if (EDJRData.ship_status.fuel_warn || EDJRData.ship_status.fuel_critical) {
-      EDJRData.ship_status.fuel_warn = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel))
-      EDJRData.ship_status.fuel_critical = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel / 2))
+      EDJRData.ship_status.fuel_warn = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel) / 2)
+      EDJRData.ship_status.fuel_critical = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel / 4))
     }
   }
   else if (log.event === 'FSDJump') {
