@@ -144,6 +144,11 @@ function process_log (log) {
     EDJRData.currentSystem = systems[system_name]
 
   }
+  else if (log.event === 'RefuelAll') {
+    EDJRData.ship_status.fuel_level=EDJRData.ship_status.max_fuel
+    EDJRData.ship_status.fuel_warn=false
+    EDJRData.ship_status.fuel_critical=false
+  }
   else if (log.event === 'FuelScoop') {
     EDJRData.ship_status.fuel_level = log.Total
     if (EDJRData.ship_status.fuel_warn || EDJRData.ship_status.fuel_critical) {
