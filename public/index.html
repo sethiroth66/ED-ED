@@ -15,7 +15,7 @@
 <div id="shipStatus" class="grid">
     <h3 class="grid grid_1_2">
         <span class="">{{Number(ship_status.current_distance_jumped).toLocaleString(undefined,{maximumFractionDigits:2})}} Ly Jumped ( avg {{Number(ship_status.avg_ly_per_hour).toLocaleString(undefined,{maximumFractionDigits:3})}} LY/h)</span>
-        <span class="" style="text-align:right;">{{ship_status.jumps_remaining}} Jumps Remaining</span>
+        <span v-if="ship_status.jumps_remaining>0" class="" style="text-align:right;">{{ship_status.jumps_remaining}} Jumps Remaining</span>
     </h3>
     <h3 class="grid_1_2 glowred" v-if="ship_status.fuel_warn" v-bind:class="{'anim_faster': ship_status.fuel_critical}">
         <span v-if="ship_status.fuel_warn && !ship_status.fuel_critical">FUEL LOW</span>

@@ -144,22 +144,10 @@ function process_log (log) {
     EDJRData.currentSystem = systems[system_name]
 
   }
-  else if (log.event === 'RefuelAll') {
-    EDJRData.ship_status.fuel_level=EDJRData.ship_status.max_fuel
-    EDJRData.ship_status.fuel_warn=false
-    EDJRData.ship_status.fuel_critical=false
-  }
-  else if (log.event === 'FuelScoop') {
-    EDJRData.ship_status.fuel_level = log.Total
-    if (EDJRData.ship_status.fuel_warn || EDJRData.ship_status.fuel_critical) {
-      EDJRData.ship_status.fuel_warn = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel) / 2)
-      EDJRData.ship_status.fuel_critical = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel / 4))
-    }
-  }
   else if (log.event === 'FSDJump') {
 
+    // Speed and distance calculation for current session.
     EDJRData.ship_status.current_distance_jumped += Number(log.JumpDist)
-
     let curtime = (new Date()).getTime()/1000;
     let time_seconds = (curtime - EDJRData.ship_status.game_start)
     let time_hours = time_seconds / 60 / 60
@@ -172,8 +160,26 @@ function process_log (log) {
 
     systems[log.StarSystem].main_body = log.BodyID.toFixed(0)
     system_name = systems[log.StarSystem].system_name
+
+    // Have we reached the route destination?
+    if (EDJRData.ship_status.jumps_remaining==1 && system_name == EDJRData.targetSystem.system_name ){
+      EDJRData.ship_status.jumps_remaining=0;
+    }
+
     // EDJRData.targetSystem=systems['__blank__'];
     EDJRData.currentSystem = systems[system_name]
+  }
+  else if (log.event === 'RefuelAll') {
+    EDJRData.ship_status.fuel_level=EDJRData.ship_status.max_fuel
+    EDJRData.ship_status.fuel_warn=false
+    EDJRData.ship_status.fuel_critical=false
+  }
+  else if (log.event === 'FuelScoop') {
+    EDJRData.ship_status.fuel_level = log.Total
+    if (EDJRData.ship_status.fuel_warn || EDJRData.ship_status.fuel_critical) {
+      EDJRData.ship_status.fuel_warn = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel) / 2)
+      EDJRData.ship_status.fuel_critical = (EDJRData.ship_status.fuel_level < (EDJRData.ship_status.max_fuel / 4))
+    }
   }
   else if (log.event === 'Scan') { // primary planetary scan event
     if (systems[log.StarSystem] === undefined) {
