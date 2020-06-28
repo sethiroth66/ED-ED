@@ -58,7 +58,7 @@
                     <div>Discovered</div>
                     <div v-bind:class="{'gloworange': !body.was_discovered }">{{ body.was_discovered }}</div>
                 </div>
-                <div class="grid grid_1_2" >
+                <div class="grid grid_1_2" v-if="body.star_type==undefined">
                     <div>Mapped</div>
                     <div v-bind:class="{'glowgreen': !body.was_discovered&&!body._was_mapped }">{{ body.was_mapped }}</div>
                 </div>
