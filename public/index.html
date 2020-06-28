@@ -62,7 +62,7 @@
                     <div>Mapped</div>
                     <div v-bind:class="{'glowgreen': !body.was_discovered&&!body._was_mapped }">{{ body.was_mapped }}</div>
                 </div>
-                <div class="grid grid_1_2">
+                <div class="grid grid_1_2" v-if="body.distance_from_arival>0">
                     <div>Distance</div>
                     <div>{{ Number(body.distance_from_arival).toLocaleString(undefined,{maximumFractionDigits:2}) }}</div>
                 </div>
