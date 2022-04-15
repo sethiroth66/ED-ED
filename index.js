@@ -1,6 +1,10 @@
 // custom settings
-const demo_mode = false
-const auto_open_browser = false
+const demo_mode = (process.argv.indexOf('--demo') > 0)
+const auto_open_browser = (process.argv.indexOf('--browser') > 0)
+
+console.log(demo_mode,auto_open_browser)
+
+return;
 
 // system index to be stored in memory
 let systems = {
@@ -279,7 +283,7 @@ function process_log (log) {
   return system_name
 }
 
-//q seems to be a constant. It, too, probably needs tweaking - and I can't help but feel I'm missing it's significance - but it's approximately: 0.56591828
+//q seems to be a constant. It, too, probably needs tweaking - and I can't help but feel I'm missing its significance - but it's approximately: 0.56591828
 const q = 0.56591828;
 const kstars = {
   "Star":1200,
